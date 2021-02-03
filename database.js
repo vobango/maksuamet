@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const User = require("./models/user");
 
-const clusterName = "test-base";
-const connection = `mongodb://localhost:27017/${clusterName}`;
+const clusterName = process.env.DB_CLUSTER || "test-base";
+const hostname = process.env.DB_HOST || "localhost";
+const connection = `mongodb://${hostname}:27017/${clusterName}`;
 
 const connectDb = () => mongoose.connect(connection);
 

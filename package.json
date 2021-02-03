@@ -2,10 +2,9 @@
   "name": "maksuamet",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "build:css": "postcss public/styles/tailwind.css -o public/styles/styles.css --env=production",
-    "dev": "nodemon server.js",
+    "build:css": "npm run tailwind:css -- --env=production",
+    "dev": "npm run tailwind:css && nodemon server.js",
     "start": "node server.js",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/styles.css",
     "test": "echo \"Error: no test specified\" && exit 1"

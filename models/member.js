@@ -6,7 +6,7 @@ const memberSchema = new mongoose.Schema({
     default: "MEMBER"
   },
   payments: [{ date: Date, sum: Number, info: String }],
-  bills: [{ date: Date, sum: Number, info: String }],
+  bills: [{type: mongoose.Schema.ObjectId, ref: "Bill"}],
   balance: {
     type: Number,
     default: 0
@@ -17,6 +17,6 @@ const memberSchema = new mongoose.Schema({
   }
 });
 
-const Member = mongoose.model("User", memberSchema);
+const Member = mongoose.model("Member", memberSchema);
 
 module.exports = Member;

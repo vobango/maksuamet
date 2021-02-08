@@ -6,14 +6,23 @@ const memberSchema = new mongoose.Schema({
     default: "MEMBER"
   },
   payments: [{ date: Date, sum: Number, info: String }],
-  bills: [{type: mongoose.Schema.ObjectId, ref: "Bill"}],
+  bills: [{ type: mongoose.Schema.ObjectId, ref: "Bill" }],
   balance: {
     type: Number,
     default: 0
   },
   details: {
-    name: String,
-    active: Boolean
+    name: {
+      type: String,
+      required: "Nimi on kohustuslik"
+    },
+    email: String,
+    phone: String,
+    idCode: String,
+    active: {
+      type: Boolean,
+      default: true
+    }
   }
 });
 

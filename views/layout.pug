@@ -7,6 +7,13 @@ html(lang="et")
     title= `${title} | Maksuamet`
     link(href="./styles/styles.css", rel="stylesheet")
   body
-    h1 Maksuamet
+    block header
+      .flex
+        a.mr-8(href="/") Maksuamet
+        ul.flex
+          li.mr-2
+            a(href="/members") Liikmed
+          li.mr-2
+            a(href="/add-member") Lisa uus liige
     block content
       p Default content

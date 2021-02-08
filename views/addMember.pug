@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  form(action=`/add-member` method="POST")
+    div
+      label(for="name") Nimi
+      input(type="text" name="name")
+
+    div
+      label(for="email") E-mail
+      input(type="email" name="email")
+
+    div
+      label(for="phone") Telefon
+      input(type="tel" name="phone")
+
+    div
+      label(for="id-code") Isikukood
+      input(type="text" name="id-code" inputmode="decimal")
+
+      input.block(type="submit" value="Salvesta")

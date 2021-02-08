@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  form(action="add-bill" method="POST")
+    fieldset
+      legend Arve saajad:
+      .border
+        each member in members
+          .flex.items-center.mb-1
+            input.mr-2(type="checkbox" name="member-list" value=member._id id=member._id)
+            label(for=member._id)= member.details.name
+
+    .block
+      label.mr-2(for="sum") Arve summa:
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="sum" name="sum" step="0.01")
+      span €
+
+    .block
+      label.mr-2(for="date") Arve esitamise kuupäev:
+      input.border-b-2(type="date" id="date" name="date" value=utils.defaultDate())
+
+    .block
+      label.mr-2(for="description") Selgitus:
+      input.border-b-2(type="text" id="description" name="description")
+
+    input.block(type="submit" value="Lisa")

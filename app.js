@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
+const utils = require("./helpers");
 
 const app = express();
 
@@ -15,6 +16,13 @@ app.use(express.static(path.join(__dirname, "public")));
 // Set up body-parser for accessing POST request body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Make utilities available in templates/controllers
+app.use((_, res, next) => {
+  res.locals.utils = utils;
+
+  next();
+});
 
 // Set up routes
 app.use("/", routes);

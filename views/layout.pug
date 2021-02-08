@@ -11,9 +11,8 @@ html(lang="et")
       .flex
         a.mr-8(href="/") Maksuamet
         ul.flex
-          li.mr-2
-            a(href="/members") Liikmed
-          li.mr-2
-            a(href="/add-member") Lisa uus liige
+          each link in utils.menu
+            li.mr-2
+             a(href=link.slug)= link.title
     block content
       p Default content

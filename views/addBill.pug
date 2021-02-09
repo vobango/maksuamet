@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  form(action="add-bill" method="POST")
+  form(action="add-bill" method="POST" enctype="multipart/form-data")
     fieldset
       legend Arve saajad:
       .border
@@ -22,5 +22,9 @@ block content
     .block
       label.mr-2(for="description") Selgitus:
       input.border-b-2(type="text" id="description" name="description")
+
+    .block
+      label.mr-2(for="file") Arve fail:
+      input(type="file" id="file" name="file")
 
     input.block(type="submit" value="Lisa")

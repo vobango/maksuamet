@@ -6,8 +6,9 @@ router.get("/", controllers.homePage);
 router.get("/members", controllers.membersPage);
 router.get("/add-member", controllers.addMember);
 router.post("/add-member", controllers.createMember);
-router.get("/bills", controllers.billsPage)
+router.get("/bills", controllers.billsPage);
 router.get("/add-bill", controllers.addBill);
-router.post("/add-bill", controllers.createBill);
+router.post("/add-bill", controllers.upload, controllers.createBill);
+router.get("/public/uploads/:filename", controllers.downloadFile);
 
 module.exports = router;

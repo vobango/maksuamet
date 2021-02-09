@@ -1,7 +1,7 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const billSchema = new mongoose.Schema({
-  date:{
+  date: {
     default: Date.now,
     type: Date
   },
@@ -13,11 +13,10 @@ const billSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  members: [
-    {type: mongoose.Schema.ObjectId, ref: "Member"}
-  ]
-})
+  file: String,
+  members: [{ type: mongoose.Schema.ObjectId, ref: "Member" }]
+});
 
-const Bill = mongoose.model("Bill", billSchema)
+const Bill = mongoose.model("Bill", billSchema);
 
-module.exports = Bill
+module.exports = Bill;

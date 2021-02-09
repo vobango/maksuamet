@@ -1,8 +1,8 @@
 extends layout
 
 block content
- h2.text-2xl Liikmed
- each member in members
+  h2.text-2xl Liikmed
+  each member in members
    div.flex
      p.mr-2= member.details.name
      p.mr-2 #{member.balance} €

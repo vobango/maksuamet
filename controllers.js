@@ -1,5 +1,6 @@
 const Member = require("./models/member");
 const Bill = require("./models/bill");
+const utils = require("./helpers")
 
 exports.homePage = (_, res) => {
   res.render("index", { title: "Koduleht" });
@@ -36,16 +37,34 @@ exports.addBill = async (_, res) => {
 
 exports.createBill = async (req, res) => {
   const { sum, date, description } = req.body;
+  let members = req.body["member-list"]
+  members = Array.isArray(members) ? members : [members]
   const details = {
     description,
     date,
     sum: parseFloat(sum),
-    members: req.body["member-list"]
+    members
   };
 
   const bill = await new Bill(details).save();
-  // TODO: update balance
   await Member.updateMany({ _id: { $in: details.members } }, { $addToSet: { bills: bill._id } });
+
+  const balancePromises = members.map(id => updateMemberBalance(id, sum, utils.SUBTRACT));
+  await Promise.all(balancePromises)
 
   res.redirect("/members");
 };
+
+const updateMemberBalance = async (id, amount, transaction) => {
+const member = await Member.findById(id)
+  let balance = 0;
+  if (transaction === utils.ADD) {
+    balance = member.balance + amount;
+  }
+  if (transaction === utils.SUBTRACT){
+    balance = member.balance - amount;
+  }
+
+  member.balance = balance;
+  member.save()
+}

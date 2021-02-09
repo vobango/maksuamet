@@ -7,3 +7,6 @@ exports.menu = [
 exports.defaultDate = () => {
   return new Date().toJSON().slice(0, 10);
 };
+
+exports.ADD = 'ADD'
+exports.SUBTRACT = 'SUBTRACT'

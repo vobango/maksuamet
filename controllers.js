@@ -29,6 +29,12 @@ exports.createMember = async (req, res) => {
   res.redirect("/members");
 };
 
+exports.billsPage = async (_, res) => {
+  const bills = await Bill.find()
+
+  res.render("bills",  {title: "Arved", bills})
+}
+
 exports.addBill = async (_, res) => {
   const members = await Member.find();
 

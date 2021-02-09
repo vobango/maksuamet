@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h2 Arved
+    table
+      tr
+        th.p-2 Selgitus
+        th.p-2 Summa €
+        th.p-2 Esitatud
+        th.p-2 Saajaid
+      each bill in bills
+        tr
+          td.p-2= bill.description
+          td.p-2.text-right= bill.sum
+          td.p-2= bill.date.toLocaleDateString("et-EE")
+          td.p-2.text-right= bill.members.length
+

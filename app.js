@@ -18,8 +18,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Make utilities available in templates/controllers
-app.use((_, res, next) => {
+app.use((req, res, next) => {
   res.locals.utils = utils;
+  res.locals.currentPath = req.path
 
   next();
 });

@@ -8,11 +8,12 @@ html(lang="et")
     link(href="./styles/styles.css", rel="stylesheet")
   body
     block header
-      .flex
-        a.mr-8(href="/") Maksuamet
-        ul.flex
+      .flex.py-6.text-lg
+        a.mr-8.ml-20.absolute(href="/") Maksuamet
+        ul.flex.mx-auto
           each link in utils.menu
             li.mr-2
-             a(href=link.slug)= link.title
-    block content
-      p Default content
+             a(href=link.slug class=(currentPath.startsWith(link.slug) ? "underline text-black" : "text-gray-500"))= link.title
+    .mt-10.mx-20
+      block content
+        p Default content

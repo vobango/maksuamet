@@ -1,21 +1,22 @@
 extends layout
 
 block content
+  h2.text-3xl.mb-10 Lisa uus liige
   form(action=`/add-member` method="POST")
-    div
+    div.my-2
       label(for="name") Nimi
-      input(type="text" name="name")
+      input.border-b-2.ml-2(type="text" name="name")
 
-    div
+    div.my-2
       label(for="email") E-mail
-      input(type="email" name="email")
+      input.border-b-2.ml-2(type="email" name="email")
 
-    div
+    div.my-2
       label(for="phone") Telefon
-      input(type="tel" name="phone")
+      input.border-b-2.ml-2(type="tel" name="phone")
 
-    div
+    div.my-2
       label(for="id-code") Isikukood
-      input(type="text" name="id-code" inputmode="decimal")
+      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal")
 
-      input.block(type="submit" value="Salvesta")
+      input.block.mt-4.p-1.rounded.bg-transparent.border.border-gray-500(type="submit" value="Salvesta")

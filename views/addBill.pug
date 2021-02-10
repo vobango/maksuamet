@@ -1,30 +1,31 @@
 extends layout
 
 block content
+  h2.text-3xl.mb-10 Lisa uus arve
   form(action="add-bill" method="POST" enctype="multipart/form-data")
     fieldset
       legend Arve saajad:
-      .border
+      .border.max-w-xs.mb-4.px-2
         each member in members
           .flex.items-center.mb-1
             input.mr-2(type="checkbox" name="member-list" value=member._id id=member._id)
             label(for=member._id)= member.details.name
 
-    .block
+    .block.mb-3
       label.mr-2(for="sum") Arve summa:
       input.border-b-2.w-16(type="number" inputmode="decimal" id="sum" name="sum" step="0.01")
       span €
 
-    .block
+    .block.mb-3
       label.mr-2(for="date") Arve esitamise kuupäev:
       input.border-b-2(type="date" id="date" name="date" value=utils.defaultDate())
 
-    .block
+    .block.mb-3
       label.mr-2(for="description") Selgitus:
       input.border-b-2(type="text" id="description" name="description")
 
-    .block
+    .block.mb-3
       label.mr-2(for="file") Arve fail:
       input(type="file" id="file" name="file")
 
-    input.block(type="submit" value="Lisa")
+    input.mt-6.p-1.border.border-gray-500.rounded.bg-transparent.w-12(type="submit" value="Lisa")

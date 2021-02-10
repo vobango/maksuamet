@@ -1,8 +1,6 @@
 exports.menu = [
   { title: "Liikmed", slug: "/members" },
-  { title: "Lisa liige", slug: "/add-member" },
   { title: "Arved", slug: "/bills" },
-  { title: "Lisa arve", slug: "/add-bill" }
 ];
 
 exports.defaultDate = () => {

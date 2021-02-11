@@ -11,20 +11,29 @@ block content
             input.mr-2(type="checkbox" name="member-list" value=member._id id=member._id)
             label(for=member._id)= member.details.name
 
-    .block.mb-3
-      label.mr-2(for="sum") Arve summa:
+    .block.mb-4
+      label.mr-2(for="sum") Arve summa (ilma KM-ta):
       input.border-b-2.w-16(type="number" inputmode="decimal" id="sum" name="sum" step="0.01")
       span €
 
-    .block.mb-3
-      label.mr-2(for="date") Arve esitamise kuupäev:
+    .block.mb-4
+      label.mr-2(for="date") Arve kuupäev:
       input.border-b-2(type="date" id="date" name="date" value=utils.defaultDate())
 
-    .block.mb-3
-      label.mr-2(for="description") Selgitus:
+    .block.mb-4
+      label.mr-2(for="handoverDate") Kättetoimetamise kuupäev:
+      input.border-b-2(type="date" id="handoverDate" name="handoverDate" value=utils.defaultDate())
+
+    .block.mb-4
+      label.mr-2(for="description") Toote/teenuse tüüp:
       input.border-b-2(type="text" id="description" name="description")
 
-    .block.mb-3
+    .block.mb-4
+      label.mr-2(for="amount") Toote/teenuse kogus:
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="amount" name="amount")
+      span tk
+
+    .block.mb-4
       label.mr-2(for="file") Arve fail:
       input(type="file" id="file" name="file")
 

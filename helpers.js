@@ -11,3 +11,4 @@ exports.log = (obj) => JSON.stringify(obj, null, 2);
 
 exports.ADD = "ADD";
 exports.SUBTRACT = "SUBTRACT";
+exports.VAT = 0.2

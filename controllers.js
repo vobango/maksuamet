@@ -46,13 +46,18 @@ exports.addBill = async (_, res) => {
 };
 
 exports.createBill = async (req, res) => {
-  const { sum, date, description, file } = req.body;
+  let { sum, date, description, file, handoverDate, amount } = req.body;
   let members = req.body["member-list"];
   members = Array.isArray(members) ? members : [members];
+  sum = parseFloat(sum);
+  const vatSum = sum * utils.VAT;
   const details = {
     description,
     date,
-    sum: parseFloat(sum),
+    handoverDate,
+    amount,
+    sum,
+    vatSum,
     members,
     file
   };

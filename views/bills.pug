@@ -5,15 +5,17 @@ block content
   a.m-2.p-1.border.rounded.border-gray-500(href="/add-bill") + Lisa uus
   table.mt-10
     tr
-      th.p-2 Selgitus
+      th.p-1 Arve nr.
+      th.p-2 Toote/teenuse tüüp
       th.p-2 Summa €
-      th.p-2 Esitatud
+      th.p-2 Arve kuupäev
       th.p-2 Saajaid
       th.p-2 Lisatud fail
     each bill in bills
       tr
+        td.p-2= bill.billNumber
         td.p-2= bill.description
-        td.p-2.text-right= bill.sum
+        td.p-2.text-right= bill.sum + bill.vatSum
         td.p-2= bill.date.toLocaleDateString("et-EE")
         td.p-2.text-right= bill.members.length
         td.p-2

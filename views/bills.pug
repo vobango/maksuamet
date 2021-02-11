@@ -6,7 +6,7 @@ block content
   table.mt-10
     tr.text-left
       th.p-1 Arve nr.
-      th.p-2 Toote/teenuse tüüp
+      th.p-2 Kirjeldus
       th.p-2 Summa €
       th.p-2 Arve kuupäev
       th.p-2 Saaja
@@ -15,10 +15,12 @@ block content
       tr
         td.p-2= bill.billNumber
         td.p-2= bill.description
-        td.p-2.text-right= bill.sum + bill.vatSum
+        td.p-2.text-right= utils.getTotalSum(bill)
         td.p-2= bill.date.toLocaleDateString("et-EE")
-        td.p-2.text-right= bill.recipient ? bill.recipient.details.name : "Tundmatu isik"
-        td.p-2
+        td.p-2= bill.recipient ? bill.recipient.details.name : "Tundmatu isik"
+        td.p-2.text-center
           if bill.file
             a(href=`/public/uploads/${bill.file}`) Lae alla
+          else
+            span -
 

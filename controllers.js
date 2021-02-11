@@ -46,13 +46,16 @@ exports.addBill = async (_, res) => {
 };
 
 exports.createBill = async (req, res) => {
-  let { sum, date, description, file, handoverDate, amount, recipients } = req.body;
+  let { sum, date, description, file, handoverDate, amount, recipients, addVat, discount } = req.body;
   sum = parseFloat(sum);
+  discount = parseInt(discount, 10) || 0;
   recipients = Array.isArray(recipients) ? recipients : [recipients];
-  const vatSum = sum * utils.VAT;
+
+  const vatSum = addVat ? sum * utils.VAT : 0;
   const details = {
     description,
     date,
+    discount,
     handoverDate,
     amount,
     sum,

@@ -25,7 +25,15 @@ const billSchema = new mongoose.Schema({
   },
   file: String,
   recipient: { type: mongoose.Schema.ObjectId, ref: "Member" },
-  vatSum: Number
+  vatSum: Number,
+  discount: {
+    type: Number,
+    default: 0
+  },
+  paid: {
+    type: Number,
+    default: 0
+  }
 });
 
 billSchema.plugin(AutoIncrement, {inc_field: "billNumber", start_seq: 1000});

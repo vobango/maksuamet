@@ -24,11 +24,11 @@ const billSchema = new mongoose.Schema({
     default: 1
   },
   file: String,
-  members: [{ type: mongoose.Schema.ObjectId, ref: "Member" }],
+  recipient: { type: mongoose.Schema.ObjectId, ref: "Member" },
   vatSum: Number
 });
 
-billSchema.plugin(AutoIncrement, {inc_field: "billNumber"});
+billSchema.plugin(AutoIncrement, {inc_field: "billNumber", start_seq: 1000});
 
 const Bill = mongoose.model("Bill", billSchema);
 

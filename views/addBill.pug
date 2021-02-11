@@ -8,7 +8,7 @@ block content
       .border.max-w-xs.mb-4.px-2
         each member in members
           .flex.items-center.mb-1
-            input.mr-2(type="checkbox" name="member-list" value=member._id id=member._id)
+            input.mr-2(type="checkbox" name="recipients" value=member._id id=member._id)
             label(for=member._id)= member.details.name
 
     .block.mb-4

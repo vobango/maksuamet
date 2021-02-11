@@ -4,12 +4,12 @@ block content
   h2.text-3xl.pl-2.mb-3 Arved
   a.m-2.p-1.border.rounded.border-gray-500(href="/add-bill") + Lisa uus
   table.mt-10
-    tr
+    tr.text-left
       th.p-1 Arve nr.
       th.p-2 Toote/teenuse tüüp
       th.p-2 Summa €
       th.p-2 Arve kuupäev
-      th.p-2 Saajaid
+      th.p-2 Saaja
       th.p-2 Lisatud fail
     each bill in bills
       tr
@@ -17,7 +17,7 @@ block content
         td.p-2= bill.description
         td.p-2.text-right= bill.sum + bill.vatSum
         td.p-2= bill.date.toLocaleDateString("et-EE")
-        td.p-2.text-right= bill.members.length
+        td.p-2.text-right= bill.recipient ? bill.recipient.details.name : "Tundmatu isik"
         td.p-2
           if bill.file
             a(href=`/public/uploads/${bill.file}`) Lae alla

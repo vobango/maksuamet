@@ -34,7 +34,7 @@ exports.createMember = async (req, res) => {
 
 // Bills
 exports.billsPage = async (_, res) => {
-  const bills = await Bill.find();
+  const bills = await Bill.find().populate('recipient');
 
   res.render("bills", { title: "Arved", bills });
 };
@@ -46,10 +46,9 @@ exports.addBill = async (_, res) => {
 };
 
 exports.createBill = async (req, res) => {
-  let { sum, date, description, file, handoverDate, amount } = req.body;
-  let members = req.body["member-list"];
-  members = Array.isArray(members) ? members : [members];
+  let { sum, date, description, file, handoverDate, amount, recipients } = req.body;
   sum = parseFloat(sum);
+  recipients = Array.isArray(recipients) ? recipients : [recipients];
   const vatSum = sum * utils.VAT;
   const details = {
     description,
@@ -58,17 +57,14 @@ exports.createBill = async (req, res) => {
     amount,
     sum,
     vatSum,
-    members,
     file
   };
 
-  const bill = await new Bill(details).save();
-  await Member.updateMany({ _id: { $in: details.members } }, { $addToSet: { bills: bill._id } });
+  for (let recipient of recipients) {
+    await saveBillToMember({...details, recipient})
+  }
 
-  const balancePromises = members.map((id) => updateMemberBalance(id, sum, utils.SUBTRACT));
-  await Promise.all(balancePromises);
-
-  res.redirect("/members");
+  res.redirect("/bills");
 };
 
 exports.downloadFile = (req, res) => {
@@ -91,6 +87,14 @@ const updateMemberBalance = async (id, amount, transaction) => {
   member.balance = balance;
   member.save();
 };
+
+const saveBillToMember = async (details) => {
+  const bill = await new Bill(details).save()
+  const sum = details.sum + details.vatSum;
+
+  await Member.findByIdAndUpdate(details.recipient, { $addToSet: { bills: bill._id } })
+  await updateMemberBalance(details.recipient, sum, utils.SUBTRACT)
+}
 
 const multerOptions = {
   storage: multer.diskStorage({

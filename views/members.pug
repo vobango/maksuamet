@@ -10,4 +10,4 @@ block content
     each member in members
       tr
         td.p-2= member.details.name
-        td.p-2.text-right #{member.balance} €
+        td.p-2.text-right #{member.balance.toFixed(2)} €

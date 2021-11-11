@@ -1,52 +1,52 @@
 # Koori andmebaas
 
 ## Praegu olemas
-Liikme lisamine
-liikme vŠljad:
-konto/kasutaja tŸŸp
-arved
-bilanss
-andmed - nimi, e-mail, telefoni nr, isikukood, aktiivne (bool)
-Arve lisamine
-arve vŠljad:
-kuupŠev
-esitamise kuupŠev
-summa
-kirjeldus
-teenuse kogus
-arve fail
-saaja
-kŠibemaks
-soodustus
-makstud summa
-Liikmete list
-Arvete list
+### Liikme lisamine
+  liikme vÃ¤ljad:
+ - konto/kasutaja tÃ¼Ã¼p
+ - arved
+ - bilanss
+ - andmed - nimi, e-mail, telefoni nr, isikukood, aktiivne (bool)
+### Arve lisamine
+  arve vÃ¤ljad:
+  - kuupÃ¤ev
+  - esitamise kuupÃ¤ev
+  - summa
+  - kirjeldus
+  - teenuse kogus
+  - arve fail
+  - saaja
+  - kÃ¤ibemaks
+  - soodustus
+  - makstud summa
+  - Liikmete list
+  - Arvete list
 
 
 ## Vaja teha
-kontrollida, kas arve lisamine tšštab ›igesti?
-summade / soodustuste jms arvutmine
-andmebaasi korrektne salvestamine
-faili upload
-docker image uuendada / uuendamine automatiseerida
-docker vol lisada
-Tarmo masinasse asi kŠima
-front eraldi, praeguste render asemele REST API
-dokumentatsioon + testid
-Liikme vŠljad:
-tudengi staatus
-liikme redigeerimine
-arve lisamine
-nŠita ainult aktiivseid liikmeid
-saajate kiirvalikud (Òvali ainult tudengidÓjne)
-arve mŠrkimine makstuks + saaja bilansi uuendamine
-olemasoleva arve redigeerimine
-kolmanda osapoole schema
-vŠljad:
-nimi
-aadress
-registrikood (optional)
-arved
-error handling
-arvete sorteerimine, filtreerimine
-liikmete sorteerimine, filtreerimine
+- [ ] dokumentatsioon + testid
+- [ ] kontrollida, kas arve lisamine tÃ¶Ã¶tab Ãµigesti?
+- [ ] summade / soodustuste jms arvutamine
+- [ ] andmebaasi korrektne salvestamine
+- [ ] faili upload
+- [ ] docker image uuendada / uuendamine automatiseerida
+- [ ] docker vol lisada
+- [ ] Tarmo masinasse asi kÃ¤ima
+- [ ] front eraldi, praeguste render asemele REST API
+- [ ] Liikme vÃ¤ljad:
+  - tudengi staatus
+- [ ] liikme redigeerimine
+- [ ] arve lisamine
+- [ ] nÃ¤ita ainult aktiivseid liikmeid
+- [ ] saajate kiirvalikud ("vali ainult tudengid" jne)
+- [ ] arve mÃ¤rkimine makstuks + saaja bilansi uuendamine
+- [ ] olemasoleva arve redigeerimine
+- [ ] arvete sorteerimine, filtreerimine
+- [ ] liikmete sorteerimine, filtreerimine
+- [ ] kolmanda osapoole schema
+- [ ] vÃ¤ljad:
+    - nimi
+    - aadress
+    - registrikood (optional)
+    - arved
+- [ ] error handling

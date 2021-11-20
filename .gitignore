@@ -1,4 +1,5 @@
 .env
+mongo-volume/
 node_modules/
 public/styles/styles.css
 public/uploads/*

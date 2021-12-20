@@ -8,6 +8,10 @@ exports.homePage = (_, res) => {
   res.render("index", { title: "Koduleht" });
 };
 
+exports.test = (_, res) => {
+  res.send({ message: `Hello, world` });
+};
+
 // Members
 exports.membersPage = async (_, res) => {
   const members = await Member.find();

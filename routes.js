@@ -10,5 +10,6 @@ router.get("/bills", controllers.billsPage);
 router.get("/add-bill", controllers.addBill);
 router.post("/add-bill", controllers.upload, controllers.createBill);
 router.get("/public/uploads/:filename", controllers.downloadFile);
+router.get("/api/test", controllers.test);
 
 module.exports = router;

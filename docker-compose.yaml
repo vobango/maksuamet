@@ -1,15 +1,41 @@
-version: "2"
+version: "3.9"
 services:
-  api:
-    image: maksuamet-api
-    ports:
-      - "8001:8001"
-    depends_on:
-      - mongo
   mongo:
     image: mongo
     volumes:
+      - mongo_conf:/data/configdb
+      - mongo_data:/data/db
       - ./init-db.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      - ./mongo-volume:/data-db
     ports:
       - "27017:27017"
+    restart: always
+  api:
+    depends_on:
+      - mongo
+    build:
+      context: ../maksuamet
+      args:
+        BUILD_TIME_ARGUMENT: ${APP_VERSION}
+    image: maksuamet-api
+    ports:
+      - "8001:8001"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_USER_PWD: ${DB_USER_PWD}
+      DB_HOST: mongo
+      DB_CLUSTER: maksuamet
+  web:
+    depends_on:
+      - api
+    build:
+      context: ../maksuamet-fe
+    image: maksuamet-web
+    ports:
+      - "80:80"
+    restart: always
+    environment:
+      API_URL: http://api:8001
+volumes:
+  mongo_data: {}
+  mongo_conf: {}
+

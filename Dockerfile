@@ -1,16 +1,21 @@
 # Select Node.js version
-FROM node:14.15.4
+FROM node:16-slim
+#Install additional tools
+RUN apt update && apt -y install curl net-tools procps
 # Create app directory
-WORKDIR /usr/src/app
-# Install dependencies
-COPY package*.json ./
+WORKDIR /app
+#Set evironment defaults
+ARG BUILD_TIME_ARGUMENT
+ENV MY_ENV="The tag is ${BUILD_TIME_ARGUMENT}"
+#Startup command
+ENTRYPOINT ["node"]
 
-RUN npm install
-# Copy source code
-COPY . .
-
-# Expose port
-EXPOSE 8001
 # Start app
-CMD ["npm", "start"]
+CMD ["server.js"]
+
+# Copy source code
+COPY . /app
+
+#Build application
+RUN npm install
 

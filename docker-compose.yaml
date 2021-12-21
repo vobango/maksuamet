@@ -31,7 +31,7 @@ services:
       context: ../maksuamet-fe
     image: maksuamet-web
     ports:
-      - "80:80"
+      - "8080:8080"
     restart: always
     environment:
       API_URL: http://api:8001

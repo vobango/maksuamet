@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+## We need environmental variables
+cp ../.env ./
 
 if [ "$1" == "init" ]; then
   git clone https://github.com/vobango/maksuamet.git

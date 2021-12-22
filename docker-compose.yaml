@@ -40,6 +40,8 @@ services:
     restart: always
     environment:
       API_URL: http://api:8001
+      USER_KOOR: ${USER_KOOR}
+      USER_ADMIN: ${USER_ADMIN}
     links:
       - api
     networks:

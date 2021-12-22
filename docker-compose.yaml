@@ -9,6 +9,8 @@ services:
     ports:
       - "27017:27017"
     restart: always
+    networks:
+      - maksuamet_net
   api:
     depends_on:
       - mongo
@@ -18,12 +20,14 @@ services:
         BUILD_TIME_ARGUMENT: ${APP_VERSION}
     image: maksuamet-api
     ports:
-      - "8001:8001"
+      - "8001"
     environment:
       DB_USER: ${DB_USER}
       DB_USER_PWD: ${DB_USER_PWD}
       DB_HOST: mongo
       DB_CLUSTER: maksuamet
+    networks:
+      - maksuamet_net
   web:
     depends_on:
       - api
@@ -31,11 +35,19 @@ services:
       context: ../maksuamet-fe
     image: maksuamet-web
     ports:
-      - "8080:8080"
+      - "8080:80"
+      - "8001:8001"
     restart: always
     environment:
       API_URL: http://api:8001
+    links:
+      - api
+    networks:
+      - maksuamet_net
 volumes:
   mongo_data: {}
   mongo_conf: {}
+networks:
+  maksuamet_net:
+    driver: bridge
 

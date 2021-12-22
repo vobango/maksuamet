@@ -3,10 +3,14 @@
 
 #update
 if [ "$1" == "update" ] || [ "$1" == "" ]; then
-  cd ../maksuamet-fe || echo "No such dir $?"; exit 1 ;
+  docker stop "$(docker ps -a -q)"
+  docker rm "$(docker ps -a -q)"
+  cd ../maksuamet-fe || echo "No such dir $?";
   git pull
-  cd ../maksuamet || echo "No such dir $?"; exit 1 ;
+  cd ../maksuamet || echo "No such dir $?";
   git pull
   cp ../.env ./
-  docker-compose -f ./maksuamet/docker-compose.yaml up -d
+  docker-compose up --force-recreate --build -d
+  docker image prune -f
+  rm -f .env
 fi;

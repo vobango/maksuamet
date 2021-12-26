@@ -30,21 +30,21 @@
 - [ ] andmebaasi korrektne salvestamine
 - [ ] faili upload
 - [ ] docker image uuendada / uuendamine automatiseerida
-- [ ] docker vol lisada
-- [ ] Tarmo masinasse asi käima
-- [ ] front eraldi, praeguste render asemele REST API
+- [x] docker vol lisada
+- [x] Tarmo masinasse asi käima
+- [ ] eraldi front tavakasutaja jaoks
 - [ ] Liikme väljad:
   - tudengi staatus
 - [ ] liikme redigeerimine
 - [ ] arve lisamine
-- [ ] näita ainult aktiivseid liikmeid
-- [ ] saajate kiirvalikud ("vali ainult tudengid" jne)
-- [ ] arve märkimine makstuks + saaja bilansi uuendamine
-- [ ] olemasoleva arve redigeerimine
-- [ ] arvete sorteerimine, filtreerimine
+  - [ ] näita ainult aktiivseid liikmeid
+  - [ ] saajate kiirvalikud ("vali ainult tudengid" jne)
+  - [ ] arve märkimine makstuks + saaja bilansi uuendamine
+  - [ ] olemasoleva arve redigeerimine
+  - [ ] arvete sorteerimine, filtreerimine
 - [ ] liikmete sorteerimine, filtreerimine
 - [ ] kolmanda osapoole schema
-- [ ] väljad:
+  - [ ] väljad:
     - nimi
     - aadress
     - registrikood (optional)

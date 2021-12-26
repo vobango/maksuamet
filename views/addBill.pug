@@ -17,13 +17,13 @@ block content
       span €
 
     .block.mb-4
-      label.mr-2(for="discount") Soodustus:
-      input.border-b-2.w-16(type="number" inputmode="decimal" id="discount" name="discount" min="0" max="100")
-      span %
+      label.mr-2(for="vat") Lisa käibemaks
+      input(type="checkbox" id="vat" name="addVat" checked="true")
 
     .block.mb-4
-      label.mr-2(for="vat") Lisa käibemaks
-      input(type="checkbox" id="vat" name="addVat")
+      label.mr-2(for="discount") Soodustus:
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="discount" name="discount" min="0" max="100" value="0")
+      span %
 
     .block.mb-4
       label.mr-2(for="date") Arve kuupäev:
@@ -39,7 +39,7 @@ block content
 
     .block.mb-4
       label.mr-2(for="amount") Toote/teenuse kogus:
-      input.border-b-2.w-16(type="number" inputmode="decimal" id="amount" name="amount")
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="amount" name="amount" value="1")
       span tk
 
     .block.mb-4

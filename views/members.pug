@@ -6,8 +6,19 @@ block content
   table.mt-10
     tr
       th.p-2.text-left Nimi
+      th.p-2.text-left E-mail
+      th.p-2.text-left Telefon
+      th.p-2.text-left Isikukood
+      th.p-2.text-left Tudeng
       th.p-2 Bilanss
+      th
     each member in members
       tr
         td.p-2= member.details.name
+        td.p-2= member.details.email
+        td.p-2 #{member.details.phone || "-"}
+        td.p-2= member.details.idCode
+        td.p-2 #{member.details.student ? "+" : "-"}
         td.p-2.text-right #{member.balance.toFixed(2)} €
+        td.p-2
+          a(href=`/edit-member/?id=` + member._id) Muuda

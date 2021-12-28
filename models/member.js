@@ -25,6 +25,10 @@ const memberSchema = new mongoose.Schema({
     active: {
       type: Boolean,
       default: true
+    },
+    student: {
+      type: Boolean,
+      default: false
     }
   }
 });

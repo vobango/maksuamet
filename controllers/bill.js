@@ -39,6 +39,11 @@ exports.createBill = async (req, res) => {
   res.redirect("/bills");
 };
 
+exports.handleCSVUpload = (req, res) => {
+  console.log(req)
+  res.send(req.body)
+}
+
 const saveBillToMember = async (details) => {
   const bill = await new Bill(details).save();
   let sum = details.sum + details.vatSum;
@@ -51,8 +56,8 @@ const saveBillToMember = async (details) => {
   await updateMemberBalance(details.recipient, sum, utils.SUBTRACT)
 };
 
-const updateMemberBalance = async (id, amount, transaction) => {
-  const member = await Member.findById(id);
+const updateMemberBalance = async (memberId, amount, transaction) => {
+  const member = await Member.findById(memberId);
   let balance = 0;
   if (transaction === utils.ADD) {
     balance = member.balance + amount;

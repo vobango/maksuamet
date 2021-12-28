@@ -1,7 +1,7 @@
 const multer = require("multer");
 const uuid = require("uuid");
-const Member = require("./models/member");
 const bill = require("./controllers/bill");
+const member = require("./controllers/member");
 
 exports.homePage = (_, res) => {
   res.render("index", { title: "Koduleht" });
@@ -12,28 +12,9 @@ exports.test = (_, res) => {
 };
 
 // Members
-exports.membersPage = async (_, res) => {
-  const members = await Member.find();
-
-  res.render("members", { title: "Liikmed", members });
-};
-
-exports.addMember = (_, res) => {
-  res.render("addMember", { title: "Lisa liige" });
-};
-
-exports.createMember = async (req, res) => {
-  const { name, phone, email } = req.body;
-  const details = {
-    name,
-    phone,
-    email,
-    idCode: req.body["id-code"]
-  };
-  await new Member({ details }).save();
-
-  res.redirect("/members");
-};
+exports.membersPage = member.membersPage;
+exports.addMember = member.addMember;
+exports.createMember = member.createMember;
 
 // Bills
 exports.billsPage = bill.billsPage;

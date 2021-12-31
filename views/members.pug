@@ -13,12 +13,12 @@ block content
       th.p-2 Bilanss
       th
     each member in members
-      tr
+      tr(class="hover:bg-gray-100")
         td.p-2= member.details.name
         td.p-2= member.details.email
         td.p-2 #{member.details.phone || "-"}
         td.p-2= member.details.idCode
         td.p-2 #{member.details.student ? "+" : "-"}
         td.p-2.text-right #{member.balance.toFixed(2)} €
-        td.p-2
+        td(class="p-2 hover:underline")
           a(href=`/edit-member/?id=` + member._id) Muuda

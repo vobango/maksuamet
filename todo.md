@@ -25,17 +25,17 @@
 
 ## Vaja teha
 - [ ] dokumentatsioon + testid
-- [ ] kontrollida, kas arve lisamine töötab õigesti?
-- [ ] summade / soodustuste jms arvutamine
+- [x] kontrollida, kas arve lisamine töötab õigesti?
+- [x] summade / soodustuste jms arvutamine
 - [ ] andmebaasi korrektne salvestamine
 - [ ] faili upload
 - [ ] docker image uuendada / uuendamine automatiseerida
 - [x] docker vol lisada
 - [x] Tarmo masinasse asi käima
 - [ ] eraldi front tavakasutaja jaoks
-- [ ] Liikme väljad:
+- [x] Liikme väljad:
   - tudengi staatus
-- [ ] liikme redigeerimine
+- [x] liikme redigeerimine
 - [ ] arve lisamine
   - [ ] näita ainult aktiivseid liikmeid
   - [ ] saajate kiirvalikud ("vali ainult tudengid" jne)

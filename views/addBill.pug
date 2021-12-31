@@ -2,14 +2,24 @@ extends layout
 
 block content
   h2.text-3xl.mb-10 Lisa uus arve
+  h3.text-xl Kiirvalikud
+  .block.border.mb-4.p-2
+    button(class="bg-gray-100 rounded py-1 px-2 m-1 hover:bg-gray-200" onClick='deselectAll();') Tühista valikud
+    button(class="bg-gray-100 rounded py-1 px-2 m-1 hover:bg-gray-200" onClick='selectAll(' + JSON.stringify(members) + ');') Vali kõik
+    button(class="bg-gray-100 rounded py-1 px-2 m-1 hover:bg-gray-200" onClick='selectStudents(' + JSON.stringify(members) + ');') Vali kõik tudengid
+    button(class="bg-gray-100 rounded py-1 px-2 m-1 hover:bg-gray-200" onClick='selectNonStudents(' + JSON.stringify(members) + ');') Vali kõik mitte-tudengid
+
   form(action="add-bill" method="POST" enctype="multipart/form-data")
-    fieldset
+    fieldset#js-recipients
       legend Arve saajad:
+      .block
       .border.max-w-xs.mb-4.px-2
         each member in members
-          .flex.items-center.mb-1
-            input.mr-2(type="checkbox" name="recipients" value=member._id id=member._id)
-            label(for=member._id)= member.details.name
+          - var active = !!member.details.active;
+          if active
+            .flex.items-center.mb-1
+              input.mr-2(type="checkbox" name="recipients" value=member._id id=member._id)
+              label(for=member._id)= member.details.name
 
     .block.mb-4
       label.mr-2(for="sum") Arve summa (ilma KM-ta):
@@ -46,4 +56,4 @@ block content
       label.mr-2(for="file") Arve fail:
       input(type="file" id="file" name="file")
 
-    input.mt-6.p-1.border.border-gray-500.rounded.bg-transparent.w-12(type="submit" value="Lisa")
+    input.my-6.p-1.border.border-gray-500.rounded.bg-transparent.w-12(type="submit" value="Lisa")

@@ -13,7 +13,7 @@ block content
       th.p-2 Bilanss
       th
     each member in members
-      tr(class="hover:bg-gray-100")
+      tr(class=`hover:bg-gray-100 ${member.details.active ? 'text-black' : 'text-gray-400'}`)
         td.p-2= member.details.name
         td.p-2= member.details.email
         td.p-2 #{member.details.phone || "-"}

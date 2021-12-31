@@ -2,6 +2,7 @@ const Member = require("../models/member");
 
 exports.membersPage = async (_, res) => {
   const members = await Member.find();
+  console.log(members)
 
   res.render("members", { title: "Liikmed", members });
 };
@@ -17,14 +18,15 @@ exports.editMember = async (req, res) => {
 };
 
 exports.updateMember = async (req, res) => {
-  const { name, phone, email, student } = req.body;
+  const { name, phone, email, student, active } = req.body;
   const idCode = req.body["id-code"];
   const details = {
     name,
     phone,
     email,
     student: !!student,
-    idCode
+    idCode,
+    active: !!active,
   };
   const member = await Member.findById(req.query.id);
 

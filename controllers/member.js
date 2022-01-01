@@ -1,4 +1,6 @@
+const fs = require("fs");
 const Member = require("../models/member");
+const Bill = require("../models/bill");
 
 exports.membersPage = async (_, res) => {
   const members = await Member.find();
@@ -49,3 +51,22 @@ exports.createMember = async (req, res) => {
 
   res.redirect("/members");
 };
+
+
+exports.deleteMember = async (req, res) => {
+  const member = await Member.findById(req.query.id).populate("bills");
+  member.bills.forEach(async bill => {
+    if (bill.file) {
+      try {
+        fs.unlinkSync(`${__dirname}/public/uploads/${filename}`);
+      } catch(error) {
+        console.log(error);
+      }
+    }
+    await Bill.findByIdAndDelete(bill._id);
+  });
+
+  await Member.findByIdAndDelete(req.query.id);
+  
+  res.redirect("/members");
+}

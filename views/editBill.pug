@@ -57,4 +57,7 @@ block content
           input(type="file" id="file" name="file")
 
 
-    input.my-6.p-1.border.border-gray-500.rounded.bg-transparent.w-20(type="submit" value="Salvesta")
+    input.my-4.p-1.border.border-gray-500.rounded.bg-transparent.w-20(type="submit" value="Salvesta")
+
+  - var fileName = bill.file ? `&filename=${bill.file}` : '';
+  a(class="bg-red-500 my-4 block text-white w-20 p-1 text-center rounded hover:bg-red-400" href=`/delete-bill?id=${bill._id}${fileName}`) Kustuta

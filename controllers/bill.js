@@ -64,7 +64,7 @@ exports.updateBill = async (req, res) => {
 
   const memberBalanceShouldBeUpdated = sum !== bill.sum
     || vatSum !== bill.vatSum
-    || discount !== bill.discount
+    || discount !== bill.discount;
   if (memberBalanceShouldBeUpdated) {
     // Refund old total sum and subtract new total
     updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
@@ -88,7 +88,7 @@ exports.deleteBill = async (req, res) => {
   const bill = await Bill.findById(req.query.id);
   await updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
   await Member.findByIdAndUpdate(bill.recipient, { $pull: { bills: bill._id } });
-  await Bill.deleteById(req.query.id);
+  await Bill.findByIdAndDelete(req.query.id);
 
   res.redirect("/bills");
 }

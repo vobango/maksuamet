@@ -44,13 +44,15 @@ const multerOptions = {
 
 exports.upload = multer(multerOptions).single("file");
 
-exports.delete = (req, res) => {
-  const { path, redirectTo = "/" } = req.body;
-  try {
-    fs.unlinkSync(path);
-  } catch(error) {
-    console.log(error);
+exports.deleteFile = (req, res, next) => {
+  const { filename } = req.query;
+  if (filename) {
+    try {
+      fs.unlinkSync(`${__dirname}/public/uploads/${filename}`);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
-  res.redirect(redirectTo);
+  next();
 };

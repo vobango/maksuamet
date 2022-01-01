@@ -34,7 +34,7 @@ block content
 
       input(class="block mt-4 mb-12 p-1 rounded bg-transparent border border-gray-500 hover:bg-gray-100 cursor-pointer" type="submit" value="Salvesta")
 
-  if member.bills.length > 0
+  if member.bills && member.bills.length > 0
     h3.text-xl Liikme arved
 
     .block.my-4
@@ -67,7 +67,8 @@ block content
   script.
     const input = document.getElementById("search");
     const bills = !{JSON.stringify(member.bills)};
-    input.addEventListener("input", event => {
+    if (input) {
+      input.addEventListener("input", event => {
       const searchString = event.target.value.toLowerCase();
       const match = bill => {
         return bill.description.toLowerCase().includes(searchString)
@@ -77,4 +78,5 @@ block content
       bills.forEach(bill => {
         document.getElementById(bill._id).style.display = matches.includes(bill) ? "table-row" : "none";
       });
-    });
+      });
+    }

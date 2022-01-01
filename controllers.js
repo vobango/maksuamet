@@ -2,6 +2,7 @@ const multer = require("multer");
 const uuid = require("uuid");
 const bill = require("./controllers/bill");
 const member = require("./controllers/member");
+const fs = require("fs");
 
 exports.homePage = (_, res) => {
   res.render("index", { title: "Koduleht" });
@@ -42,3 +43,14 @@ const multerOptions = {
 };
 
 exports.upload = multer(multerOptions).single("file");
+
+exports.delete = (req, res) => {
+  const { path, redirectTo = "/" } = req.body;
+  try {
+    fs.unlinkSync(path);
+  } catch(error) {
+    console.log(error);
+  }
+
+  res.redirect(redirectTo);
+};

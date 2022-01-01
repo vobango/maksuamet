@@ -7,6 +7,10 @@ exports.defaultDate = () => {
   return new Date().toJSON().slice(0, 10);
 };
 
+exports.dateInputValue = (date) => {
+  return new Date(date).toJSON().slice(0, 10);
+};
+
 exports.getTotalSum = ({sum, vatSum, discount}) => {
   const total = sum + vatSum;
 

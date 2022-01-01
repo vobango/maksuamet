@@ -9,17 +9,22 @@ block content
       th.p-2 Saaja
       th.p-2 Kirjeldus
       th.p-2 Summa €
+      th.p-2 Makstud €
       th.p-2 Arve kuupäev
       th.p-2 Lisatud fail
+      th
     each bill in bills
       tr
         td.p-2= bill.billNumber
         td.p-2= bill.recipient ? bill.recipient.details.name : "Tundmatu isik"
         td.p-2= bill.description
         td.p-2.text-right= utils.getTotalSum(bill)
+        td.p-2.text-right= bill.paid
         td.p-2= bill.date.toLocaleDateString("et-EE")
         td.p-2.text-center
           if bill.file
             a(href=`/public/uploads/${bill.file}`) Lae alla
           else
             span -
+        td(class="p-2 text-left hover:underline")
+          a(href=`/edit-bill?id=${bill._id}`) Muuda

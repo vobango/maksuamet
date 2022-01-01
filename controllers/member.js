@@ -2,7 +2,6 @@ const Member = require("../models/member");
 
 exports.membersPage = async (_, res) => {
   const members = await Member.find();
-  console.log(members)
 
   res.render("members", { title: "Liikmed", members });
 };

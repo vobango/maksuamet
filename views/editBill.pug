@@ -1,0 +1,55 @@
+extends layout
+
+block content
+  h2.text-3xl.mb-5 Muuda arvet nr. #{bill.billNumber}
+
+  .block
+    dl.flex.mb-4
+      dt.mr-2 Saaja:
+      dd.font-bold= bill.recipient.details.name
+
+  form(action=`edit-bill?id=${bill._id}` method="POST")
+    .block.mb-4
+      label.mr-2(for="sum") Summa (ilma KM-ta):
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="sum" name="sum" step="0.01" value=bill.sum)
+      span €
+
+    .block.mb-4
+      label.mr-2(for="vat") Käibemaks:
+      input(type="checkbox" id="vat" name="addVat" checked=bill.vatSum !== 0)
+
+    .block.mb-4
+      label.mr-2(for="discount") Soodustus:
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="discount" name="discount" min="0" max="100" value=bill.discount)
+      span %
+
+    .block.mb-4
+      label.mr-2(for="date") Arve kuupäev:
+      input.border-b-2(type="date" id="date" name="date" value=utils.dateInputValue(bill.date))
+
+    .block.mb-4
+      label.mr-2(for="handoverDate") Kättetoimetamise kuupäev:
+      input.border-b-2(type="date" id="handoverDate" name="handoverDate" value=utils.dateInputValue(bill.handoverDate))
+
+    .block.mb-4
+      label.mr-2(for="description") Toote/teenuse tüüp:
+      input.border-b-2(type="text" id="description" name="description" value=bill.description)
+
+    .block.mb-4
+      label.mr-2(for="amount") Toote/teenuse kogus:
+      input.border-b-2.w-16(type="number" inputmode="decimal" id="amount" name="amount" value=bill.amount)
+      span tk
+
+    if bill.file
+        dl.flex.mb-4
+          dt.mr-2 Fail:
+          dd.underline
+            a(href=`/public/uploads/${bill.file}`)= bill.file
+            
+    else
+        .block.mb-4
+          label.mr-2(for="file") Arve fail:
+          input(type="file" id="file" name="file")
+
+
+    input.my-6.p-1.border.border-gray-500.rounded.bg-transparent.w-20(type="submit" value="Salvesta")

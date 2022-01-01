@@ -13,6 +13,8 @@ router.post("/edit-member", memberController.updateMember);
 router.get("/bills", controllers.billsPage);
 router.get("/add-bill", controllers.addBill);
 router.post("/add-bill", controllers.upload, controllers.createBill);
+router.get("/edit-bill", billController.editBill);
+router.post("/edit-bill", billController.updateBill);
 router.post("/upload-data", controllers.upload, billController.handleCSVUpload);
 router.get("/public/uploads/:filename", controllers.downloadFile);
 router.get("/api/test", controllers.test);

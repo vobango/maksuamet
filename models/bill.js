@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const utils = require("../helpers")
 const AutoIncrement = require("mongoose-sequence")(mongoose)
 
 const billSchema = new mongoose.Schema({

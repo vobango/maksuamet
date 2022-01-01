@@ -3,7 +3,7 @@ const Member = require("../models/member");
 const Bill = require("../models/bill");
 
 exports.membersPage = async (_, res) => {
-  const members = await Member.find();
+  const members = await Member.find().sort('details.name');
 
   res.render("members", { title: "Liikmed", members });
 };

@@ -13,7 +13,7 @@ exports.addMember = (_, res) => {
 };
 
 exports.editMember = async (req, res) => {
-  const member = await Member.findById(req.query.id);
+  const member = await Member.findById(req.query.id).populate("bills");
 
   res.render("editMember", { title: "Muuda liikme andmeid", member });
 };

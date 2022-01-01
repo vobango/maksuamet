@@ -32,6 +32,27 @@ block content
       input.border-b-2.w-24(type="number" inputmode="decimal" id="balance" name="balance" step="0.01" value=member.balance)
       span €
 
-      input.block.mt-4.p-1.rounded.bg-transparent.border.border-gray-500(type="submit" value="Salvesta")
+      input.block.mt-4.mb-12.p-1.rounded.bg-transparent.border.border-gray-500(type="submit" value="Salvesta")
 
-  a(class="bg-red-500 my-4 block text-white w-20 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member._id}`) Kustuta
+  if member.bills.length > 0
+    h3.text-xl Liikme arved
+    table
+      thead
+        th.py-2.pr-2 Arve nr.
+        th.p-2 Kirjeldus
+        th.p-2 Summa €
+        th.p-2 Makstud €
+        th
+      each bill in member.bills
+        tr(class="hover:bg-gray-100")
+          td.py-2.pr-2= bill.billNumber
+          td.p-2= bill.description
+          td.p-2.text-right= utils.getTotalSum(bill)
+          td.p-2.text-right= bill.paid
+          td(class="p-2 text-left hover:underline")
+            a(href=`/edit-bill?id=${bill._id}`) Vaata
+  else
+    p Liikmel puuduvad arved
+
+
+  a(class="bg-red-500 my-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member._id}`) Kustuta liige

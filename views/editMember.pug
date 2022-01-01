@@ -36,6 +36,11 @@ block content
 
   if member.bills.length > 0
     h3.text-xl Liikme arved
+
+    .block.my-4
+      label.mr-2(for="search") Otsi:
+      input.border-2.rounded(type="text" id="search" name="search")
+
     table.sortable.my-4
       thead
         th.py-2.pr-2 Arve nr.
@@ -46,7 +51,7 @@ block content
         th.no-sort
       tbody
         each bill in member.bills
-          tr(class="hover:bg-gray-100")
+          tr(class="hover:bg-gray-100" id=bill._id)
             td.py-2.pr-2= bill.billNumber
             td.p-2= bill.description
             td.p-2.text-right= utils.getTotalSum(bill)
@@ -57,5 +62,19 @@ block content
   else
     p Liikmel puuduvad arved
 
-
   a(class="bg-red-500 mt-20 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member._id}`) Kustuta liige
+
+  script.
+    const input = document.getElementById("search");
+    const bills = !{JSON.stringify(member.bills)};
+    input.addEventListener("input", event => {
+      const searchString = event.target.value.toLowerCase();
+      const match = bill => {
+        return bill.description.toLowerCase().includes(searchString)
+          || new Date(bill.date).toLocaleDateString("et-EE").includes(searchString);
+      };
+      const matches = bills.filter(match);
+      bills.forEach(bill => {
+        document.getElementById(bill._id).style.display = matches.includes(bill) ? "table-row" : "none";
+      });
+    });

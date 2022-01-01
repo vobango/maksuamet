@@ -13,7 +13,7 @@ block content
     fieldset#js-recipients
       legend Arve saajad:
       .block
-      .border.max-w-xs.mb-4.px-2
+      .border.max-w-xs.max-h-80.overflow-auto.mb-4.px-2
         each member in members
           - var active = !!member.details.active;
           if active
@@ -56,4 +56,4 @@ block content
       label.mr-2(for="file") Arve fail:
       input(type="file" id="file" name="file")
 
-    input.my-6.p-1.border.border-gray-500.rounded.bg-transparent.w-12(type="submit" value="Lisa")
+    input(class="my-6 p-1 border border-gray-500 rounded bg-transparent w-12 cursor-pointer hover:bg-gray-100" type="submit" value="Lisa")

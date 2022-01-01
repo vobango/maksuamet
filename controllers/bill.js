@@ -50,6 +50,7 @@ exports.updateBill = async (req, res) => {
   const vatSum = addVat ? sum * utils.VAT : 0;
   const sum = parseFloat(req.body.sum) || 0;
   const discount = parseInt(req.body.discount, 10) || 0;
+  const paid = parseFloat(req.body.paid) || 0;
   const newData = {
     vatSum,
     sum,
@@ -58,17 +59,26 @@ exports.updateBill = async (req, res) => {
     handoverDate,
     amount: parseInt(amount, 10) || 1,
     description,
+    paid,
   };
 
-  const memberBalanceShouldBeUpdated = sum !== bill.sum || vatSum !== bill.vatSum || discount !== bill.discount;
+  const memberBalanceShouldBeUpdated = sum !== bill.sum
+    || vatSum !== bill.vatSum
+    || discount !== bill.discount
   if (memberBalanceShouldBeUpdated) {
     // Refund old total sum and subtract new total
     updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
     updateMemberBalance(bill.recipient, utils.getTotalSum(newData), utils.SUBTRACT);
   }
 
+  if (paid !== bill.paid) {
+    const diff = paid - bill.paid;
+    const transaction = diff > 0 ? utils.ADD : utils.SUBTRACT;
+
+    updateMemberBalance(bill.recipient, diff, transaction);
+  }
+
   Object.assign(bill, newData);
-  console.log(bill, req.body)
   bill.save();
 
   res.redirect("/bills");

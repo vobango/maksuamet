@@ -17,7 +17,7 @@ exports.editMember = async (req, res) => {
 };
 
 exports.updateMember = async (req, res) => {
-  const { name, phone, email, student, active } = req.body;
+  const { name, phone, email, student, active, balance } = req.body;
   const idCode = req.body["id-code"];
   const details = {
     name,
@@ -30,6 +30,7 @@ exports.updateMember = async (req, res) => {
   const member = await Member.findById(req.query.id);
 
   member.details = details;
+  member.balance = parseFloat(balance) || 0;
   await member.save();
 
   res.redirect("/members");

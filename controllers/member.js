@@ -44,7 +44,7 @@ exports.createMember = async (req, res) => {
     name,
     phone,
     email,
-    student,
+    student: !!student,
     idCode: req.body["id-code"]
   };
   await new Member({ details }).save();
@@ -69,4 +69,31 @@ exports.deleteMember = async (req, res) => {
   await Member.findByIdAndDelete(req.query.id);
   
   res.redirect("/members");
+}
+
+exports.getMembers = async (_, res) => {
+  const members = await Member.find().sort("balance");
+  const data = members.map(member => {
+    return {
+      name: member.details.name,
+      balance: member.balance,
+    };
+  });
+
+  res.send({ data });
+}
+
+exports.getMemberDetails = async (req, res) => {
+  const member = await Member.findById(req.query.id).populate("bills");
+
+  if (!member) {
+    res.status(404).send({ message: "Member not found." });
+  }
+
+  const data = {
+    name: member.details.name,
+    bills: member.bills,
+  };
+
+  res.send({ data });
 }

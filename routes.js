@@ -15,7 +15,7 @@ router.post("/edit-member", catchErrors(memberController.updateMember));
 router.get("/delete-member", catchErrors(memberController.deleteMember));
 router.get("/bills", controllers.billsPage);
 router.get("/add-bill", controllers.addBill);
-router.post("/add-bill", catchErrors(controllers.upload), catchErrors(controllers.createBill));
+router.post("/add-bill", controllers.upload, catchErrors(controllers.createBill));
 router.get("/edit-bill", catchErrors(billController.editBill));
 router.post("/edit-bill", catchErrors(billController.updateBill));
 router.get("/delete-bill", catchErrors(controllers.deleteFile), catchErrors(billController.deleteBill));

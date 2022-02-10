@@ -18,8 +18,8 @@ router.get("/add-bill", controllers.addBill);
 router.post("/add-bill", controllers.upload, catchErrors(controllers.createBill));
 router.get("/edit-bill", catchErrors(billController.editBill));
 router.post("/edit-bill", catchErrors(billController.updateBill));
-router.get("/delete-bill", catchErrors(controllers.deleteFile), catchErrors(billController.deleteBill));
-router.post("/upload-data", catchErrors(controllers.upload), catchErrors(billController.handleCSVUpload));
+router.get("/delete-bill", controllers.deleteFile, catchErrors(billController.deleteBill));
+router.post("/upload-data", controllers.upload, catchErrors(billController.handleCSVUpload));
 router.get("/public/uploads/:filename", catchErrors(controllers.downloadFile));
 
 // API

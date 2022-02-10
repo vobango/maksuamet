@@ -98,6 +98,27 @@ exports.handleCSVUpload = (req, res) => {
   res.send(req.body)
 }
 
+exports.getEvents = async (_, res) => {
+  const bills = await Bill.find().populate({ path: "recipient", select: "details.name" });
+  const events = await Bill.distinct("description");
+  const data = events.map(event => {
+    const eventBills = bills.filter(bill => bill.description === event).map(bill => {
+      return {
+        amount: utils.getTotalSum(bill),
+        member: bill.recipient.details.name,
+        paid: bill.paid,
+      };
+    });
+    return {
+      name: event,
+      date: bills.find(bill => bill.description === event).date.getTime(),
+      bills: eventBills,
+    };
+  });
+
+  res.send({ data });
+}
+
 const saveBillToMember = async (details) => {
   const bill = await new Bill(details).save();
   let sum = utils.getTotalSum(details);

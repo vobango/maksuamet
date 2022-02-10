@@ -2,23 +2,30 @@ const express = require("express");
 const controllers = require("./controllers");
 const billController = require("./controllers/bill");
 const memberController = require("./controllers/member");
+const { catchErrors } = require("./helpers");
 const router = express.Router();
 
+// Admin app
 router.get("/", controllers.homePage);
 router.get("/members", controllers.membersPage);
 router.get("/add-member", controllers.addMember);
-router.post("/add-member", controllers.createMember);
-router.get("/edit-member", memberController.editMember);
-router.post("/edit-member", memberController.updateMember);
-router.get("/delete-member", memberController.deleteMember);
+router.post("/add-member", catchErrors(controllers.createMember));
+router.get("/edit-member", catchErrors(memberController.editMember));
+router.post("/edit-member", catchErrors(memberController.updateMember));
+router.get("/delete-member", catchErrors(memberController.deleteMember));
 router.get("/bills", controllers.billsPage);
 router.get("/add-bill", controllers.addBill);
-router.post("/add-bill", controllers.upload, controllers.createBill);
-router.get("/edit-bill", billController.editBill);
-router.post("/edit-bill", billController.updateBill);
-router.get("/delete-bill", controllers.deleteFile, billController.deleteBill);
-router.post("/upload-data", controllers.upload, billController.handleCSVUpload);
-router.get("/public/uploads/:filename", controllers.downloadFile);
+router.post("/add-bill", catchErrors(controllers.upload), catchErrors(controllers.createBill));
+router.get("/edit-bill", catchErrors(billController.editBill));
+router.post("/edit-bill", catchErrors(billController.updateBill));
+router.get("/delete-bill", catchErrors(controllers.deleteFile), catchErrors(billController.deleteBill));
+router.post("/upload-data", catchErrors(controllers.upload), catchErrors(billController.handleCSVUpload));
+router.get("/public/uploads/:filename", catchErrors(controllers.downloadFile));
+
+// API
 router.get("/api/test", controllers.test);
+router.get("/api/members", memberController.getMembers);
+router.get("/api/member", memberController.getMemberDetails);
+router.get("/api/events", billController.getEvents);
 
 module.exports = router;

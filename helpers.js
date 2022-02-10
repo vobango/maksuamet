@@ -26,3 +26,13 @@ exports.log = (obj) => JSON.stringify(obj, null, 2);
 exports.ADD = "ADD";
 exports.SUBTRACT = "SUBTRACT";
 exports.VAT = 0.2;
+
+exports.catchErrors = (fn) => {
+  return function(req, res, next) {
+    return fn(req, res, next).catch(next);
+  };
+};
+
+exports.errorHandler = (err, _, res) => {
+  res.status(err.status || 500).render('error', { message: err.message });
+};

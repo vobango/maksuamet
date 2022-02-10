@@ -28,4 +28,6 @@ app.use((req, res, next) => {
 // Set up routes
 app.use("/", routes);
 
+app.use(utils.errorHandler);
+
 module.exports = app;

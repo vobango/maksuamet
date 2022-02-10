@@ -2,6 +2,9 @@ const Bill = require("../models/bill");
 const Member = require("../models/member");
 const utils = require("../helpers");
 
+/*
+ * Admin app views
+ */
 exports.billsPage = async (_, res) => {
   const bills = await Bill.find().populate('recipient');
 
@@ -93,11 +96,9 @@ exports.deleteBill = async (req, res) => {
   res.redirect("/bills");
 }
 
-exports.handleCSVUpload = (req, res) => {
-  console.log(req)
-  res.send(req.body)
-}
-
+/*
+ * API endpoints
+ */
 exports.getEvents = async (_, res) => {
   const bills = await Bill.find().populate({ path: "recipient", select: "details.name" });
   const events = await Bill.distinct("description");
@@ -119,6 +120,9 @@ exports.getEvents = async (_, res) => {
   res.send({ data });
 }
 
+/*
+ * Utilities
+ */
 const saveBillToMember = async (details) => {
   const bill = await new Bill(details).save();
   let sum = utils.getTotalSum(details);
@@ -140,3 +144,8 @@ const updateMemberBalance = async (memberId, amount, transaction) => {
   member.balance = balance;
   member.save();
 };
+
+exports.handleCSVUpload = (req, res) => {
+  console.log(req)
+  res.send(req.body)
+}

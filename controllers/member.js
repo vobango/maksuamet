@@ -2,6 +2,9 @@ const fs = require("fs");
 const Member = require("../models/member");
 const Bill = require("../models/bill");
 
+/*
+  * Admin app views
+*/
 exports.membersPage = async (_, res) => {
   const members = await Member.find().sort('details.name');
 
@@ -71,6 +74,9 @@ exports.deleteMember = async (req, res) => {
   res.redirect("/members");
 }
 
+/* 
+  * API endpoints
+*/
 exports.getMembers = async (_, res) => {
   const members = await Member.find().sort("balance");
   const data = members.map(member => {

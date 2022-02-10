@@ -34,5 +34,7 @@ exports.catchErrors = (fn) => {
 };
 
 exports.errorHandler = (err, _, res) => {
-  res.status(err.status || 500).render('error', { message: err.message });
+  if (res.status) {
+    res.status(err.status || 500).render('error', { message: err.message });
+  }
 };

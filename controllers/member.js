@@ -83,6 +83,7 @@ exports.getMembers = async (_, res) => {
     return {
       name: member.details.name,
       balance: member.balance,
+      id: member._id
     };
   });
 

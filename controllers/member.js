@@ -88,6 +88,10 @@ exports.deleteMember = async (req, res) => {
   res.redirect("/members");
 }
 
+exports.paymentPage = (_, res) => {
+  res.render("addPayment", { title: "Lisa sissemakse" });
+};                   
+
 /* 
   * API endpoints
 */

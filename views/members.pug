@@ -32,6 +32,7 @@ block content
         th.p-2.text-left Tudeng
         th.p-2 Bilanss
         th.p-2 Aktiivne
+        th.no-sort Valikud
         th.no-sort
     tbody
       each member in members
@@ -44,7 +45,9 @@ block content
           td.p-2.text-right(data-sort=parseFloat(member.balance)) #{member.balance.toFixed(2)} €
           td.p-2 #{member.details.active ? "+" : ""}
           td(class="p-2 hover:underline")
-            a(href=`/edit-member/?id=` + member._id) Vaata
+            a(href=`/edit-member/?id=` + member._id) Detailid
+          td(class="p-2 hover:underline")
+            a(href=`/add-payment/?id=` + member._id) Lisa makse
 
   script.
     const input = document.getElementById("search");

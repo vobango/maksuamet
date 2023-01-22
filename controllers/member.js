@@ -122,7 +122,7 @@ exports.getMemberDetails = async (req, res) => {
 exports.getTotalBalance = async (_, res) => {
   const members = await Member.find();
   const data = members.reduce((sum, member) => {
-    return sum += member.balance;
+    return sum + member.balance;
   }, 0).toFixed(2);
 
   res.send({ data });

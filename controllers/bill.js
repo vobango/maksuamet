@@ -100,29 +100,28 @@ exports.deleteBill = async (req, res) => {
  * API endpoints
  */
 exports.getEvents = async (_, res) => {
-  const bills = await Bill.find().populate({ path: "recipient", select: "details.name" });
   const events = await Bill.distinct("description");
-  const data = events.map(event => {
-    const eventBills = bills.filter(bill => bill.description === event).map(bill => {
+
+  res.send({ data: events });
+}
+
+exports.getEventData = async (req, res) => {
+  const bills = await Bill.find({ description: req.query.id }).populate({ path: "recipient", select: "details.name" });
+  const data = {
+    sum: bills.reduce((sum, bill) => {
+      return sum + utils.getTotalSum(bill);
+    }, 0).toFixed(2),
+    paid: bills.reduce((sum, bill) => {
+      return sum + bill.paid;
+    }, 0).toFixed(2),
+    bills: bills.map(bill => {
       return {
         amount: utils.getTotalSum(bill),
         member: bill.recipient.details.name,
         paid: bill.paid,
       };
-    });
-
-    return {
-      name: event,
-      date: bills.find(bill => bill.description === event).date.getTime(),
-      bills: eventBills,
-      sum: eventBills.reduce((sum, bill) => {
-        return sum + bill.amount;
-      }, 0).toFixed(2),
-      paid: eventBills.reduce((sum, bill) => {
-        return sum + bill.paid;
-      }, 0).toFixed(2),
-    };
-  });
+    }),
+  };
 
   res.send({ data });
 }

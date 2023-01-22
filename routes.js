@@ -27,6 +27,7 @@ router.get("/api/test", controllers.test);
 router.get("/api/members", catchErrors(memberController.getMembers));
 router.get("/api/member", catchErrors(memberController.getMemberDetails));
 router.get("/api/events", catchErrors(billController.getEvents));
+router.get("/api/event", catchErrors(billController.getEventData));
 router.get("/api/totalBalance", catchErrors(memberController.getTotalBalance));
 
 module.exports = router;

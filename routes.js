@@ -24,8 +24,8 @@ router.get("/public/uploads/:filename", catchErrors(controllers.downloadFile));
 
 // API
 router.get("/api/test", controllers.test);
-router.get("/api/members", memberController.getMembers);
-router.get("/api/member", memberController.getMemberDetails);
-router.get("/api/events", billController.getEvents);
+router.get("/api/members", catchErrors(memberController.getMembers));
+router.get("/api/member", catchErrors(memberController.getMemberDetails));
+router.get("/api/events", catchErrors(billController.getEvents));
 
 module.exports = router;

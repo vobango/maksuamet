@@ -50,8 +50,8 @@ exports.editBill = async (req, res) => {
 exports.updateBill = async (req, res) => {
   const bill = await Bill.findById(req.query.id);
   const { addVat, date, handoverDate, amount, description } = req.body;
-  const vatSum = addVat ? sum * utils.VAT : 0;
   const sum = parseFloat(req.body.sum) || 0;
+  const vatSum = addVat ? sum * utils.VAT : 0;
   const discount = parseInt(req.body.discount, 10) || 0;
   const paid = parseFloat(req.body.paid) || 0;
   const newData = {

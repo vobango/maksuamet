@@ -119,6 +119,12 @@ exports.getMemberDetails = async (req, res) => {
         amount: utils.getTotalSum(bill).toFixed(2),
         paid: bill.paid
       };
+    }).sort((a, b) => {
+      if (a.paid > 0 && b.paid > 0) {
+        return new Date(a.date) - new Date(b.date);
+      }
+
+      return a.paid - b.paid;
     }),
     balance: member.balance.toFixed(2),
   };

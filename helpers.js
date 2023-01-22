@@ -21,6 +21,13 @@ exports.getTotalSum = ({sum, vatSum, discount}) => {
   return total;
 };
 
+exports.displayFormat = (number) => {
+  const fixed = parseFloat(number).toFixed(2);
+  const displayNumber = fixed.endsWith(".00") ? fixed.substring(0, fixed.indexOf(".")) : fixed;
+
+  return `${displayNumber} €`;
+};
+
 exports.log = (obj) => JSON.stringify(obj, null, 2);
 
 exports.ADD = "ADD";

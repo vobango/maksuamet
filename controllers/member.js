@@ -96,7 +96,7 @@ exports.getMembers = async (_, res) => {
   const data = members.map(member => {
     return {
       name: member.details.name,
-      balance: member.balance.toFixed(2),
+      balance: utils.displayFormat(member.balance),
       id: member._id,
     };
   });
@@ -116,8 +116,8 @@ exports.getMemberDetails = async (req, res) => {
     bills: member.bills.map(bill => {
       return {
         description: bill.description,
-        amount: utils.getTotalSum(bill).toFixed(2),
-        paid: bill.paid
+        amount: utils.displayFormat(utils.getTotalSum(bill)),
+        paid: utils.displayFormat(bill.paid)
       };
     }).sort((a, b) => {
       if (a.paid > 0 && b.paid > 0) {
@@ -126,7 +126,7 @@ exports.getMemberDetails = async (req, res) => {
 
       return a.paid - b.paid;
     }),
-    balance: member.balance.toFixed(2),
+    balance: utils.displayFormat(member.balance),
   };
 
   res.send({ data });
@@ -134,9 +134,10 @@ exports.getMemberDetails = async (req, res) => {
 
 exports.getTotalBalance = async (_, res) => {
   const members = await Member.find();
-  const data = members.reduce((sum, member) => {
+  const sum = members.reduce((sum, member) => {
     return sum + member.balance;
-  }, 0).toFixed(2);
+  }, 0);
+  const data = utils.displayFormat(sum);
 
   res.send({ data });
 }

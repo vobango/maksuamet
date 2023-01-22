@@ -107,18 +107,20 @@ exports.getEvents = async (_, res) => {
 
 exports.getEventData = async (req, res) => {
   const bills = await Bill.find({ description: req.query.id }).populate({ path: "recipient", select: "details.name" });
-  const data = {
-    sum: bills.reduce((sum, bill) => {
+  const sum = bills.reduce((sum, bill) => {
       return sum + utils.getTotalSum(bill);
-    }, 0).toFixed(2),
-    paid: bills.reduce((sum, bill) => {
+    }, 0);
+  const paid = bills.reduce((sum, bill) => {
       return sum + bill.paid;
-    }, 0).toFixed(2),
+    }, 0);
+  const data = {
+    sum: utils.displayFormat(sum),
+    paid: utils.displayFormat(paid),
     bills: bills.map(bill => {
       return {
-        amount: utils.getTotalSum(bill),
+        amount: utils.displayFormat(utils.getTotalSum(bill)),
         member: bill.recipient.details.name,
-        paid: bill.paid,
+        paid: utils.displayFormat(bill.paid),
       };
     }),
   };

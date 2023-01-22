@@ -110,10 +110,17 @@ exports.getEvents = async (_, res) => {
         paid: bill.paid,
       };
     });
+
     return {
       name: event,
       date: bills.find(bill => bill.description === event).date.getTime(),
       bills: eventBills,
+      sum: eventBills.reduce((sum, bill) => {
+        return sum + bill.amount;
+      }, 0).toFixed(2),
+      paid: eventBills.reduce((sum, bill) => {
+        return sum + bill.paid;
+      }, 0).toFixed(2),
     };
   });
 

@@ -96,7 +96,7 @@ exports.getMembers = async (_, res) => {
     return {
       name: member.details.name,
       balance: member.balance,
-      id: member._id
+      id: member._id,
     };
   });
 
@@ -113,7 +113,7 @@ exports.getMemberDetails = async (req, res) => {
   const data = {
     name: member.details.name,
     bills: member.bills,
-    balance: member.balance
+    balance: member.balance.toFixed(2),
   };
 
   res.send({ data });

@@ -100,6 +100,7 @@ exports.getMemberDetails = async (req, res) => {
   const data = {
     name: member.details.name,
     bills: member.bills,
+    balance: member.balance
   };
 
   res.send({ data });

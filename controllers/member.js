@@ -6,7 +6,7 @@ const Bill = require("../models/bill");
   * Admin app views
 */
 exports.membersPage = async (_, res) => {
-  const members = await Member.find().sort('details.name');
+  const members = await Member.find().sort({'details.active': -1, 'details.name': 1});
 
   res.render("members", { title: "Liikmed", members });
 };

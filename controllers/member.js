@@ -95,7 +95,7 @@ exports.getMembers = async (_, res) => {
   const data = members.map(member => {
     return {
       name: member.details.name,
-      balance: member.balance,
+      balance: member.balance.toFixed(2),
       id: member._id,
     };
   });

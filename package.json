@@ -24,6 +24,8 @@
   "dependencies": {
     "autoprefixer": "^10.2.4",
     "body-parser": "^1.19.0",
+    "bootstrap": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^5.11.14",
@@ -33,12 +35,11 @@
     "postcss": "^8.2.4",
     "postcss-cli": "^8.3.1",
     "pug": "^3.0.0",
-    "tailwindcss": "^2.0.2",
-    "uuid": "^8.3.2",
-    "bootstrap": "^5.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.0",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "tailwindcss": "^2.0.2",
+    "uuid": "^8.3.2"
   }
 }

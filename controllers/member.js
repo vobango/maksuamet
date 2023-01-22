@@ -1,6 +1,7 @@
 const fs = require("fs");
 const Member = require("../models/member");
 const Bill = require("../models/bill");
+const utils = require("../helpers");
 
 /*
   * Admin app views
@@ -112,7 +113,13 @@ exports.getMemberDetails = async (req, res) => {
 
   const data = {
     name: member.details.name,
-    bills: member.bills,
+    bills: member.bills.map(bill => {
+      return {
+        description: bill.description,
+        amount: utils.getTotalSum(bill).toFixed(2),
+        paid: bill.paid
+      };
+    }),
     balance: member.balance.toFixed(2),
   };
 

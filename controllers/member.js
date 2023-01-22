@@ -22,8 +22,9 @@ exports.editMember = async (req, res) => {
 };
 
 exports.updateMember = async (req, res) => {
-  const { name, phone, email, student, active, balance } = req.body;
+  const { name, phone, email, student, active, balance, birthday } = req.body;
   const idCode = req.body["id-code"];
+
   const details = {
     name,
     phone,
@@ -32,6 +33,12 @@ exports.updateMember = async (req, res) => {
     idCode,
     active: !!active,
   };
+
+  if (birthday) {
+    const [day, month] = birthday.split('.');
+    details.birthday = new Date("2000", parseInt(month, 10) - 1, parseInt(day, 10));
+  }
+
   const member = await Member.findById(req.query.id);
 
   member.details = details;
@@ -42,14 +49,20 @@ exports.updateMember = async (req, res) => {
 }
 
 exports.createMember = async (req, res) => {
-  const { name, phone, email, student } = req.body;
+  const { name, phone, email, student, birthday } = req.body;
   const details = {
     name,
     phone,
     email,
     student: !!student,
-    idCode: req.body["id-code"]
+    idCode: req.body["id-code"],
   };
+
+  if (birthday) {
+    const [day, month] = birthday.split('.');
+    details.birthday = new Date("2000", parseInt(month, 10) - 1, parseInt(day, 10));
+  }
+
   await new Member({ details }).save();
 
   res.redirect("/members");

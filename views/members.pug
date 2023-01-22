@@ -1,5 +1,8 @@
 extends layout
 
+block variables
+  - var dateOptions = { day: "2-digit", month: "2-digit" }
+
 block content
   h2.text-3xl.mb-3.ml-2 Liikmed
   a(class="m-2 p-1 border rounded border-gray-500 hover:bg-gray-100 cursor-pointer" href="/add-member") + Lisa uus
@@ -25,9 +28,10 @@ block content
         th.p-2.text-left Nimi
         th.p-2.text-left E-mail
         th.p-2.text-left Telefon
-        th.p-2.text-left Isikukood
+        th.p-2.text-left Sünnipäev
         th.p-2.text-left Tudeng
         th.p-2 Bilanss
+        th.p-2 Aktiivne
         th.no-sort
     tbody
       each member in members
@@ -35,11 +39,12 @@ block content
           td.p-2= member.details.name
           td.p-2= member.details.email
           td.p-2 #{member.details.phone || "-"}
-          td.p-2(data-sort=parseInt(member.details.idCode, 10) || 0)= member.details.idCode
-          td.p-2 #{member.details.student ? "+" : "-"}
+          td.p-2(data-sort=member.details.birthday) #{member.details.birthday ? member.details.birthday.toLocaleDateString("et-EE", dateOptions) : ""}
+          td.p-2 #{member.details.student ? "+" : ""}
           td.p-2.text-right(data-sort=parseFloat(member.balance)) #{member.balance.toFixed(2)} €
+          td.p-2 #{member.details.active ? "+" : ""}
           td(class="p-2 hover:underline")
-            a(href=`/edit-member/?id=` + member._id) Muuda
+            a(href=`/edit-member/?id=` + member._id) Vaata
 
   script.
     const input = document.getElementById("search");

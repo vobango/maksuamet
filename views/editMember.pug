@@ -1,5 +1,8 @@
 extends layout
 
+block variables
+  - var birthday = member.details.birthday ? new Date(member.details.birthday).getDate() + "." + (new Date(member.details.birthday).getMonth() < 9 ? "0" : "") + (new Date(member.details.birthday).getMonth() + 1) : ""
+
 block content
   h2.text-3xl.mb-10 Muuda liikme andmeid
   form(action=`/edit-member/?id=${member._id}` method="POST")
@@ -17,7 +20,18 @@ block content
 
     .my-2
       label(for="id-code") Isikukood
-      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal" value=member.details.idCode)
+      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal" value=member.details.idCode id="idCode")
+
+    div.my-2
+      label(for="birthday") Sünnipäev
+      input.border-b-2.ml-2(
+        type="text"
+        name="birthday"
+        inputmode="decimal"
+        id="birthday"
+        placeholder="päev.kuu"
+        value=birthday
+      )
 
     .my-2
       label(for="student") Tudeng

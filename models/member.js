@@ -22,6 +22,7 @@ const memberSchema = new mongoose.Schema({
       type: String,
       unique: true
     },
+    birthday: Date,
     active: {
       type: Boolean,
       default: true

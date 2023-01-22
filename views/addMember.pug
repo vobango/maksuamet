@@ -17,10 +17,29 @@ block content
 
     div.my-2
       label(for="id-code") Isikukood
-      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal")
+      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal" id="idCode")
+
+    div.my-2
+      label(for="birthday") Sünnipäev
+      input.border-b-2.ml-2(type="text" name="birthday" inputmode="decimal" id="birthday" placeholder="päev.kuu")
 
     div.my-2
       label(for="student") Tudeng
       input.border-b-2.ml-2(type="checkbox" name="student")
 
       input(class="block mt-4 p-1 rounded bg-transparent border border-gray-500 hover:bg-gray-100 cursor-pointer" type="submit" value="Salvesta")
+
+  script.
+    const idCodeInput = document.getElementById("idCode");
+    idCodeInput.addEventListener("input", (event) => {
+      event.preventDefault();
+      const code = event.target.value;
+      if (!code || code.length < 7) return;
+
+      const month = code.substring(3, 5);
+      const day = code.substring(5, 7);
+      if (month <= 12 && day <= 31) {
+        const birthdayInput = document.getElementById("birthday");
+        birthdayInput.value = `${day}.${month}`;
+      }
+    });

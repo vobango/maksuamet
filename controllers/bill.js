@@ -114,6 +114,7 @@ exports.getEventData = async (req, res) => {
       return sum + bill.paid;
     }, 0);
   const data = {
+    name: req.query.id,
     sum: utils.displayFormat(sum),
     paid: utils.displayFormat(paid),
     bills: bills.map(bill => {

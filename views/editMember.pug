@@ -43,7 +43,7 @@ block content
 
     .my-2
       label.mr-2(for="balance") Bilanss:
-      input.border-b-2.w-24(type="number" inputmode="decimal" id="balance" name="balance" step="0.01" value=member.balance)
+      input.border-b-2.w-24(type="text" id="balance" name="balance" value=member.balance)
       span €
 
       input(class="block mt-4 mb-12 p-1 rounded bg-transparent border border-gray-500 hover:bg-gray-100 cursor-pointer" type="submit" value="Salvesta")
@@ -75,6 +75,33 @@ block content
               a(href=`/edit-bill?id=${bill._id}`) Vaata
   else
     p Liikmel puuduvad arved
+
+  if member.payments && member.payments.length > 0
+    h3.text-xl.mt-8 Liikme sissemaksed
+    a(href="/add-payment?id=" + member._id class="hover:bg-gray-200").p-2.border.rounded.mt-2.inline-block Lisa uus makse
+
+    table.sortable.my-4
+      thead
+        th.py-2.pr-2 Kuupäev
+        th.p-2 Kirjeldus
+        th.p-2 Summa €
+        th.p-2 Seotud arved
+      tbody
+        each payment in member.payments
+          tr(id=payment._id)
+            td.py-2.pr-2= payment.date ? payment.date.toLocaleDateString("et-EE") : ""
+            td.p-2= payment.info
+            td.p-2= payment.sum
+            td.p-2
+              if payment.bills && payment.bills.length > 0
+                each bill, idx in payment.bills
+                  a(href="/edit-bill?id=" + bill.id class="hover:underline")= member.bills.find(billRef => billRef._id.toString() === bill.id.toString()).billNumber
+                  span(class=(idx === payment.bills.length - 1 ? "hidden" : "mr-2")) ,
+              else
+                span -
+  else
+    h3.text-lg.mt-8 Liikmel puuduvad sissemaksed
+    a(href="/add-payment?id=" + member._id).p-2.border.rounder.mt-2.inline-block Lisa uus makse
 
   a(class="bg-red-500 mt-20 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member._id}`) Kustuta liige
 

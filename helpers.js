@@ -11,14 +11,17 @@ exports.dateInputValue = (date) => {
   return new Date(date).toJSON().slice(0, 10);
 };
 
+const decimal = (value) => Math.round(parseFloat(value) * 100) / 100;
+exports.decimal = decimal;
+
 exports.getTotalSum = ({sum, vatSum, discount}) => {
-  const total = sum + vatSum;
+  const total = decimal(sum) + decimal(vatSum);
 
   if (discount) {
-    return total - total * (discount / 100);
+    return total - total * (decimal(discount) / 100);
   }
 
-  return total;
+  return decimal(total);
 };
 
 exports.displayFormat = (number) => {

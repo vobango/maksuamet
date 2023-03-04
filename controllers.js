@@ -16,7 +16,12 @@ exports.test = (_, res) => {
 exports.membersPage = member.membersPage;
 exports.addMember = member.addMember;
 exports.createMember = member.createMember;
+
+// Payments
 exports.paymentPage = member.paymentPage;
+exports.addPayment = member.addPayment;
+exports.editPayment = member.editPayment;
+exports.updatePayment = member.updatePayment;
 
 // Bills
 exports.billsPage = bill.billsPage;

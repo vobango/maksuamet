@@ -5,7 +5,7 @@ const memberSchema = new mongoose.Schema({
     type: String,
     default: "MEMBER"
   },
-  payments: [{ date: Date, sum: Number, info: String, bills: [{ type: mongoose.Schema.ObjectId, ref: "Bill" }] }],
+  payments: [{ date: Date, sum: Number, info: String, bills: [{ sum: Number, id: { type: mongoose.Schema.ObjectId, ref: "Bill" } }] }],
   bills: [{ type: mongoose.Schema.ObjectId, ref: "Bill" }],
   balance: {
     type: Number,

@@ -29,6 +29,7 @@ block content
         th.p-2.text-left E-mail
         th.p-2.text-left Telefon
         th.p-2.text-left Sünnipäev
+        th.p-2.text-left Isikukood
         th.p-2.text-left Tudeng
         th.p-2 Bilanss
         th.p-2 Aktiivne
@@ -41,6 +42,7 @@ block content
           td.p-2= member.details.email
           td.p-2 #{member.details.phone || "-"}
           td.p-2(data-sort=member.details.birthday) #{member.details.birthday ? member.details.birthday.toLocaleDateString("et-EE", dateOptions) : ""}
+          td.p-2= member.details.idCode
           td.p-2 #{member.details.student ? "+" : ""}
           td.p-2.text-right(data-sort=parseFloat(member.balance)) #{member.balance.toFixed(2)} €
           td.p-2 #{member.details.active ? "+" : ""}

@@ -13,11 +13,11 @@ html(lang="et")
   body
     block header
       .flex.py-6.text-lg.flex-col
-        a.mr-8.ml-20(href="/") Maksuamet
+        a.mr-8.ml-20(href="/" class="hover:underline") Maksuamet
         ul.flex.mx-auto
           each link in utils.menu
             li.mr-2
-             a(href=link.slug class=(currentPath.startsWith(link.slug) ? "underline text-black" : "text-gray-500"))= link.title
+             a(href=link.slug class=(currentPath.startsWith(link.slug) ? "underline text-black" : "text-gray-500 hover:underline"))= link.title
     .mt-10.mx-20
       block content
         p Default content

@@ -141,17 +141,20 @@ const saveBillToMember = async (details) => {
 
 const updateMemberBalance = async (memberId, amount, transaction) => {
   const member = await Member.findById(memberId);
+  const value = utils.decimal(amount);
   let balance = 0;
+
   if (transaction === utils.ADD) {
-    balance = member.balance + amount;
+    balance = utils.decimal(member.balance) + value;
   }
   if (transaction === utils.SUBTRACT) {
-    balance = member.balance - amount;
+    balance = utils.decimal(member.balance) - value;
   }
 
-  member.balance = balance;
+  member.balance = utils.decimal(balance);
   member.save();
 };
+exports.updateMemberBalance = updateMemberBalance;
 
 exports.handleCSVUpload = (req, res) => {
   console.log(req)

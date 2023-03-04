@@ -2,6 +2,7 @@ const fs = require("fs");
 const Member = require("../models/member");
 const Bill = require("../models/bill");
 const utils = require("../helpers");
+const { updateMemberBalance } = require("./bill");
 
 /*
   * Admin app views
@@ -88,9 +89,71 @@ exports.deleteMember = async (req, res) => {
   res.redirect("/members");
 }
 
-exports.paymentPage = (_, res) => {
-  res.render("addPayment", { title: "Lisa sissemakse" });
+exports.paymentPage = async (req, res) => {
+  const member = await Member.findById(req.query.id).populate("bills");
+
+  res.render("addPayment", { title: "Lisa sissemakse", member });
 };                   
+
+exports.addPayment = async (req, res) => {
+  const { bills: selectedBills, amount, info, member, date } = req.body;
+  const billIds = Array.isArray(selectedBills) ? selectedBills : selectedBills ? [selectedBills] : [];
+  const bills = billIds.map(id => ({ sum: 0, id }));
+  const sum = utils.decimal(amount);
+  const data = {
+    bills,
+    sum,
+    info,
+    date,
+  };
+  const memberData = await Member.findById(member);
+
+  let balance = sum;
+  const billsData = await Promise.all(billIds.map(id => Bill.findById(id)));
+  billsData.forEach(billData => {
+    const billSum = utils.getTotalSum(billData);
+    const { paid } = billData;
+    const billInPaymentData = bills.find(bill => bill.id === billData._id.toString());
+
+    if (paid < billSum) {
+      const amountToPay = utils.decimal(billSum - paid);
+      if (amountToPay <= balance) {
+        billData.paid = utils.decimal(billData.paid + amountToPay);
+        billInPaymentData.sum = amountToPay;
+        balance = utils.decimal(balance - amountToPay);
+      } else if (balance > 0) {
+        const paidSum = utils.decimal(balance);
+        billData.paid = utils.decimal(billData.paid + paidSum);
+        billInPaymentData.sum = paidSum;
+        balance = 0;
+      }
+    }
+
+    billData.save();
+  });
+
+  const payments = [...memberData.payments, data];
+  memberData.payments = payments;
+
+  await memberData.save();
+
+  await updateMemberBalance(member, sum, utils.ADD);
+
+  res.redirect("/members");
+};
+
+exports.editPayment = async (req, res) => {
+  const member = await Member.findById(req.query.memberId).populate("bills");
+  const data = member.payments.find(payment => payment._id.toString() === req.query.paymentId);
+
+  res.render("editPayment", { title: "Muuda makse andmeid", member, data });
+};
+
+exports.updatePayment = async (req, res) => {
+  console.log(req.body)
+
+  res.send({ data: "ok" })
+};
 
 /* 
   * API endpoints

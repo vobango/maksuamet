@@ -102,7 +102,7 @@ exports.deleteBill = async (req, res) => {
 exports.getEvents = async (_, res) => {
   const events = await Bill.distinct("description");
 
-  res.send({ data: events });
+  res.send({ data: events.map(event => ({ name: event })) });
 }
 
 exports.getEventData = async (req, res) => {

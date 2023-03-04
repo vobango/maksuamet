@@ -26,7 +26,7 @@ block content
           each bill in member.bills
             tr(class="hover:bg-gray-100" id=bill._id)
               td.py-2
-                input(type="checkbox" value=bill._id name="bills")
+                input(type="checkbox" value=bill._id name="bills" checked=(bill.paid < utils.getTotalSum(bill)))
               td.py-2.pr-2= bill.billNumber
               td.p-2= bill.description
               td.p-2.text-right= utils.getTotalSum(bill)

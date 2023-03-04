@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   mongo:
-    image: mongo
+    image: mongo:4.4
     volumes:
       - mongo_conf:/data/configdb
       - mongo_data:/data/db

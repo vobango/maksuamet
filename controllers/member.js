@@ -184,14 +184,32 @@ exports.getMemberDetails = async (req, res) => {
       return {
         description: bill.description,
         amount: utils.displayFormat(utils.getTotalSum(bill)),
-        paid: utils.displayFormat(bill.paid)
+        paid: utils.displayFormat(bill.paid),
+        dateTime: bill.date,
+        date: bill.date.toLocaleDateString("et-EE"),
       };
     }).sort((a, b) => {
       if (a.paid > 0 && b.paid > 0) {
-        return new Date(a.date) - new Date(b.date);
+        return new Date(a.dateTime) - new Date(b.dateTime);
       }
 
       return a.paid - b.paid;
+    }),
+    payments: member.payments.map(item => {
+      return {
+        description: item.info,
+        amount: utils.displayFormat(item.sum),
+        dateTime: item.date,
+        date: item.date.toLocaleDateString("et-EE"),
+        bills: item.bills.map(bill => {
+          return {
+            description: member.bills.find(billData => billData._id.toString() === bill.id.toString())?.description,
+            amount: utils.displayFormat(bill.sum),
+          };
+        }),
+      };
+    }).sort((a, b) => {
+      return new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime();
     }),
     balance: utils.displayFormat(member.balance),
   };

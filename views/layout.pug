@@ -12,8 +12,8 @@ html(lang="et")
     script(src="/js/app.js")
   body
     block header
-      .flex.py-6.text-lg
-        a.mr-8.ml-20.absolute(href="/") Maksuamet
+      .flex.py-6.text-lg.flex-col
+        a.mr-8.ml-20(href="/") Maksuamet
         ul.flex.mx-auto
           each link in utils.menu
             li.mr-2

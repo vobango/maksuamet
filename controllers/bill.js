@@ -120,7 +120,7 @@ exports.getEventData = async (req, res) => {
     bills: bills.map(bill => {
       return {
         amount: utils.displayFormat(utils.getTotalSum(bill)),
-        member: bill.recipient.details.name,
+        member: bill.recipient?.details.name,
         paid: utils.displayFormat(bill.paid),
       };
     }),

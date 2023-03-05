@@ -100,9 +100,10 @@ exports.deleteBill = async (req, res) => {
  * API endpoints
  */
 exports.getEvents = async (_, res) => {
-  const events = await Bill.distinct("description");
+  const uniqueEvents = await Bill.distinct("description");
+  const events = await Promise.all(uniqueEvents.map(event => Bill.findOne({ description: event }, 'description date')));
 
-  res.send({ data: events.map(event => ({ name: event })) });
+  res.send({ data: events.map(event => ({ name: event.description, date: new Date(event.date).getTime() })) });
 }
 
 exports.getEventData = async (req, res) => {
@@ -115,6 +116,7 @@ exports.getEventData = async (req, res) => {
     }, 0);
   const data = {
     name: req.query.id,
+    date: new Date(bills[0].date).getTime(),
     sum: utils.displayFormat(sum),
     paid: utils.displayFormat(paid),
     bills: bills.map(bill => {

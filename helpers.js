@@ -1,3 +1,6 @@
+const numeral = require('numeral');
+const {Role, roles} = require("./models/role");
+
 exports.menu = [
   { title: "Liikmed", slug: "/members" },
   { title: "Arved", slug: "/bills" },
@@ -25,10 +28,7 @@ exports.getTotalSum = ({sum, vatSum, discount}) => {
 };
 
 exports.displayFormat = (number) => {
-  const fixed = parseFloat(number).toFixed(2);
-  const displayNumber = fixed.endsWith(".00") ? fixed.substring(0, fixed.indexOf(".")) : fixed;
-
-  return `${displayNumber} €`;
+  return numeral(number).format('0,0.0 €');
 };
 
 exports.log = (obj) => JSON.stringify(obj, null, 2);
@@ -47,4 +47,28 @@ exports.errorHandler = (err, _, res) => {
   if (res.status) {
     res.status(err.status || 500).render('error', { message: err.message });
   }
+};
+
+exports.addInitialRoles = () => {
+  Role.estimatedDocumentCount((err, count) => {
+    if (err) {
+      console.log('Error checking roles', err);
+
+      return;
+    }
+
+    if (count > 0) {
+      return;
+    }
+
+    roles.forEach(role => {
+      new Role({ name: role }).save(err => {
+        if (err) {
+          console.log('Error saving role', err);
+        }
+
+        console.log(`Added ${role} to roles collection`);
+      });
+    });
+  })
 };

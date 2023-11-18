@@ -55,4 +55,10 @@
     - registrikood (optional)
     - arved
 - [x] error handling
+- [ ] Arvete makstud summa muutmine sissemaksete alusel
+    - Uue arve loomisel kontrollitakse iga arve saaja maksed üle ja võimalusel kasutatakse ülejääki arve (osaliseks) maksmiseks + seostatakse arve vastava maksega
+    - Arve muutmisel uuendatakse arve "paid" välja vastavalt maksetele
+    - Arve kustutamisel kustub arve seos ka sissemakselt
+- [ ] Sissemaksete muutmine + kustutamine
+    - mõlemal juhul seotud arvete "paid" välja uuendamine
 - [ ] JWT peale lülitada nginx auth pealt

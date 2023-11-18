@@ -8,14 +8,14 @@ block content
   a(class="m-2 p-1 border rounded border-gray-500 hover:bg-gray-100 cursor-pointer" href="/add-member") + Lisa uus
 
   .block.my-6
-    dl.grid.grid-cols-2.w-44
+    dl.grid.grid-cols-2.w-52
       dt.mx-2 Kokku:
       dd.text-right= members.length
 
       dt.mx-2 Aktiivseid:
       dd.text-right= members.filter(member => member.details.active).length
 
-      dt.mx-2 Tudengeid (aktiivseid):
+      dt.mx-2.w-44 Tudengeid (aktiivseid):
       dd.text-right= members.filter(member => member.details.student && member.details.active).length
     
   .block.mt-8.mb-4

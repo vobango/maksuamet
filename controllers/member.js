@@ -110,27 +110,31 @@ exports.addPayment = async (req, res) => {
 
   let balance = sum;
   const billsData = await Promise.all(billIds.map(id => Bill.findById(id)));
-  billsData.forEach(billData => {
+
+  for (const billData of billsData) {
     const billSum = utils.getTotalSum(billData);
     const { paid } = billData;
     const billInPaymentData = bills.find(bill => bill.id === billData._id.toString());
 
     if (paid < billSum) {
       const amountToPay = utils.decimal(billSum - paid);
+
       if (amountToPay <= balance) {
         billData.paid = utils.decimal(billData.paid + amountToPay);
         billInPaymentData.sum = amountToPay;
+
         balance = utils.decimal(balance - amountToPay);
       } else if (balance > 0) {
         const paidSum = utils.decimal(balance);
         billData.paid = utils.decimal(billData.paid + paidSum);
         billInPaymentData.sum = paidSum;
+
         balance = 0;
       }
     }
 
-    billData.save();
-  });
+    await billData.save();
+  };
 
   const payments = [...memberData.payments, data];
   memberData.payments = payments;

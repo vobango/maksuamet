@@ -44,6 +44,7 @@ exports.createBill = async (req, res) => {
 
 exports.editBill = async (req, res) => {
   const bill = await Bill.findById(req.query.id).populate('recipient');
+
   res.render("editBill", { title: `Muuda arvet nr ${bill.billNumber}`, bill });
 };
 
@@ -70,19 +71,19 @@ exports.updateBill = async (req, res) => {
     || discount !== bill.discount;
   if (memberBalanceShouldBeUpdated) {
     // Refund old total sum and subtract new total
-    updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
-    updateMemberBalance(bill.recipient, utils.getTotalSum(newData), utils.SUBTRACT);
+    await updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
+    await updateMemberBalance(bill.recipient, utils.getTotalSum(newData), utils.SUBTRACT);
   }
 
   if (paid !== bill.paid) {
     const diff = paid - bill.paid;
     const transaction = diff > 0 ? utils.ADD : utils.SUBTRACT;
 
-    updateMemberBalance(bill.recipient, diff, transaction);
+    await updateMemberBalance(bill.recipient, diff, transaction);
   }
 
   Object.assign(bill, newData);
-  bill.save();
+  await bill.save();
 
   res.redirect("/bills");
 }
@@ -155,8 +156,10 @@ const updateMemberBalance = async (memberId, amount, transaction) => {
   }
 
   member.balance = utils.decimal(balance);
-  member.save();
+
+  await member.save();
 };
+
 exports.updateMemberBalance = updateMemberBalance;
 
 exports.handleCSVUpload = (req, res) => {

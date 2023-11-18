@@ -1,7 +1,9 @@
 extends layout
 
 block variables
-  - var birthday = member.details.birthday ? new Date(member.details.birthday).getDate() + "." + (new Date(member.details.birthday).getMonth() < 9 ? "0" : "") + (new Date(member.details.birthday).getMonth() + 1) : ""
+  - var idCode = member.details.idCode
+  - var bDayFromIdCode = idCode ? idCode.substring(5, 7) + "." + idCode.substring(3, 5) : ""
+  - var birthday = member.details.birthday ? new Date(member.details.birthday).getDate() + "." + (new Date(member.details.birthday).getMonth() < 9 ? "0" : "") + (new Date(member.details.birthday).getMonth() + 1) : bDayFromIdCode
 
 block content
   h2.text-3xl.mb-10 Muuda liikme andmeid
@@ -86,6 +88,7 @@ block content
         th.p-2 Kirjeldus
         th.p-2 Summa €
         th.p-2 Seotud arved
+        th.no-sort
       tbody
         each payment in member.payments
           tr(id=payment._id)
@@ -99,6 +102,8 @@ block content
                   span(class=(idx === payment.bills.length - 1 ? "hidden" : "mr-2")) ,
               else
                 span -
+            td.p-2(class="hover:underline")
+              a(href=`/edit-payment?paymentId=${payment._id}&memberId=${member._id}`) Vaata
   else
     h3.text-lg.mt-8 Liikmel puuduvad sissemaksed
     a(href="/add-payment?id=" + member._id).p-2.border.rounder.mt-2.inline-block Lisa uus makse

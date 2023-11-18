@@ -156,7 +156,7 @@ exports.updatePayment = async (req, res) => {
 };
 
 /* 
-  * API endpoints
+  * API endpoint methods
 */
 exports.getMembers = async (_, res) => {
   const members = await Member.find().sort("balance");
@@ -223,6 +223,18 @@ exports.getTotalBalance = async (_, res) => {
     return sum + member.balance;
   }, 0);
   const data = utils.displayFormat(sum);
+
+  res.send({ data });
+}
+
+exports.getBirthdays = async (_, res) => {
+  const members = await Member.find();
+  const data = members.map(member => {
+    return {
+      name: member.details.name,
+      birthday: member.details.birthday?.toLocaleDateString("et-EE", { day: "numeric", month: "numeric" }) ?? "",
+    };
+  });
 
   res.send({ data });
 }

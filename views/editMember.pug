@@ -1,28 +1,23 @@
 extends layout
 
-block variables
-  - var idCode = member.details.idCode
-  - var bDayFromIdCode = idCode ? idCode.substring(5, 7) + "." + idCode.substring(3, 5) : ""
-  - var birthday = member.details.birthday ? new Date(member.details.birthday).getDate() + "." + (new Date(member.details.birthday).getMonth() < 9 ? "0" : "") + (new Date(member.details.birthday).getMonth() + 1) : bDayFromIdCode
-
 block content
   h2.text-3xl.mb-10 Muuda liikme andmeid
-  form(action=`/edit-member/?id=${member._id}` method="POST")
+  form(action=`/edit-member/?id=${member.id}` method="POST")
     .my-2
       label(for="name") Nimi
-      input.border-b-2.ml-2(type="text" name="name" value=member.details.name)
+      input.border-b-2.ml-2(type="text" name="name" value=member.name)
 
     .my-2
       label(for="email") E-mail
-      input.border-b-2.ml-2(type="email" name="email" value=member.details.email)
+      input.border-b-2.ml-2(type="email" name="email" value=member.email)
 
     .my-2
       label(for="phone") Telefon
-      input.border-b-2.ml-2(type="tel" name="phone" value=member.details.phone)
+      input.border-b-2.ml-2(type="tel" name="phone" value=member.phone)
 
     .my-2
       label(for="id-code") Isikukood
-      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal" value=member.details.idCode id="idCode")
+      input.border-b-2.ml-2(type="text" name="id-code" inputmode="decimal" value=member.idCode id="idCode")
 
     div.my-2
       label(for="birthday") Sünnipäev
@@ -32,21 +27,20 @@ block content
         inputmode="decimal"
         id="birthday"
         placeholder="päev.kuu"
-        value=birthday
+        value=member.birthday
       )
 
     .my-2
       label(for="student") Tudeng
-      input.border-b-2.ml-2(type="checkbox" name="student" checked=member.details.student)
+      input.border-b-2.ml-2(type="checkbox" name="student" checked=member.student)
 
     .my-2
       label(for="active") Aktiivne
-      input.border-b-2.ml-2(type="checkbox" name="active" checked=member.details.active)
+      input.border-b-2.ml-2(type="checkbox" name="active" checked=member.active)
 
     .my-2
       label.mr-2(for="balance") Bilanss:
-      input.border-b-2.w-24(type="text" id="balance" name="balance" value=member.balance)
-      span €
+      span=member.balance
 
       input(class="block mt-4 mb-12 p-1 rounded bg-transparent border border-gray-500 hover:bg-gray-100 cursor-pointer" type="submit" value="Salvesta")
 
@@ -80,7 +74,7 @@ block content
 
   if member.payments && member.payments.length > 0
     h3.text-xl.mt-8 Liikme sissemaksed
-    a(href="/add-payment?id=" + member._id class="hover:bg-gray-200").p-2.border.rounded.mt-2.inline-block Lisa uus makse
+    a(href="/add-payment?id=" + member.id class="hover:bg-gray-200").p-2.border.rounded.mt-2.inline-block Lisa uus makse
 
     table.sortable.my-4
       thead
@@ -103,12 +97,12 @@ block content
               else
                 span -
             td.p-2(class="hover:underline")
-              a(href=`/edit-payment?paymentId=${payment._id}&memberId=${member._id}`) Vaata
+              a(href=`/edit-payment?paymentId=${payment._id}&memberId=${member.id}`) Vaata
   else
     h3.text-lg.mt-8 Liikmel puuduvad sissemaksed
-    a(href="/add-payment?id=" + member._id).p-2.border.rounder.mt-2.inline-block Lisa uus makse
+    a(href="/add-payment?id=" + member.id).p-2.border.rounder.mt-2.inline-block Lisa uus makse
 
-  a(class="bg-red-500 mt-20 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member._id}`) Kustuta liige
+  a(class="bg-red-500 mt-20 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member.id}`) Kustuta liige
 
   script.
     const input = document.getElementById("search");

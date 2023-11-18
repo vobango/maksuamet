@@ -6,7 +6,7 @@ const utils = require("../helpers");
  * Admin app views
  */
 exports.billsPage = async (_, res) => {
-  const bills = await Bill.find().populate('recipient');
+  const bills = await Bill.find().populate('recipient').sort({ date: -1, billNumber: -1 });
 
   res.render("bills", { title: "Arved", bills });
 };
@@ -36,7 +36,10 @@ exports.createBill = async (req, res) => {
   };
 
   for (let recipient of recipients) {
-    await saveBillToMember({...details, recipient})
+    const fullDetails = {...details, recipient};
+    const bill = await new Bill(fullDetails).save();
+
+    await Member.findByIdAndUpdate(recipient, { $addToSet: { bills: bill._id } })
   }
 
   res.redirect("/bills");
@@ -44,6 +47,7 @@ exports.createBill = async (req, res) => {
 
 exports.editBill = async (req, res) => {
   const bill = await Bill.findById(req.query.id).populate('recipient');
+
   res.render("editBill", { title: `Muuda arvet nr ${bill.billNumber}`, bill });
 };
 
@@ -65,31 +69,16 @@ exports.updateBill = async (req, res) => {
     paid,
   };
 
-  const memberBalanceShouldBeUpdated = sum !== bill.sum
-    || vatSum !== bill.vatSum
-    || discount !== bill.discount;
-  if (memberBalanceShouldBeUpdated) {
-    // Refund old total sum and subtract new total
-    updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
-    updateMemberBalance(bill.recipient, utils.getTotalSum(newData), utils.SUBTRACT);
-  }
-
-  if (paid !== bill.paid) {
-    const diff = paid - bill.paid;
-    const transaction = diff > 0 ? utils.ADD : utils.SUBTRACT;
-
-    updateMemberBalance(bill.recipient, diff, transaction);
-  }
-
   Object.assign(bill, newData);
-  bill.save();
+
+  await bill.save();
 
   res.redirect("/bills");
 }
 
 exports.deleteBill = async (req, res) => {
   const bill = await Bill.findById(req.query.id);
-  await updateMemberBalance(bill.recipient, utils.getTotalSum(bill), utils.ADD);
+
   await Member.findByIdAndUpdate(bill.recipient, { $pull: { bills: bill._id } });
   await Bill.findByIdAndDelete(req.query.id);
 
@@ -99,6 +88,16 @@ exports.deleteBill = async (req, res) => {
 /*
  * API endpoints
  */
+exports.getTotalBalance = async (_, res) => {
+  const bills = await Bill.find();
+  const sum = bills.reduce((result, bill) => {
+    return result + (bill.paid - utils.getTotalSum(bill));
+  }, 0);
+  const data = utils.displayFormat(sum);
+
+  res.send({ data });
+}
+
 exports.getEvents = async (_, res) => {
   const uniqueEvents = await Bill.distinct("description");
   const events = await Promise.all(uniqueEvents.map(event => Bill.findOne({ description: event }, 'description date')));
@@ -134,31 +133,6 @@ exports.getEventData = async (req, res) => {
 /*
  * Utilities
  */
-const saveBillToMember = async (details) => {
-  const bill = await new Bill(details).save();
-  let sum = utils.getTotalSum(details);
-
-  await Member.findByIdAndUpdate(details.recipient, { $addToSet: { bills: bill._id } })
-  await updateMemberBalance(details.recipient, sum, utils.SUBTRACT)
-};
-
-const updateMemberBalance = async (memberId, amount, transaction) => {
-  const member = await Member.findById(memberId);
-  const value = utils.decimal(amount);
-  let balance = 0;
-
-  if (transaction === utils.ADD) {
-    balance = utils.decimal(member.balance) + value;
-  }
-  if (transaction === utils.SUBTRACT) {
-    balance = utils.decimal(member.balance) - value;
-  }
-
-  member.balance = utils.decimal(balance);
-  member.save();
-};
-exports.updateMemberBalance = updateMemberBalance;
-
 exports.handleCSVUpload = (req, res) => {
   console.log(req)
   res.send(req.body)

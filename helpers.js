@@ -1,5 +1,7 @@
-const numeral = require('numeral');
 const {Role, roles} = require("./models/role");
+const numeral = require("numeral");
+require('numeral/locales/et');
+numeral.locale('et');
 
 exports.menu = [
   { title: "Liikmed", slug: "/members" },
@@ -13,6 +15,8 @@ exports.defaultDate = () => {
 exports.dateInputValue = (date) => {
   return new Date(date).toJSON().slice(0, 10);
 };
+
+exports.dateFormatOptions = { day: "2-digit", month: "2-digit" };
 
 const decimal = (value) => Math.round(parseFloat(value) * 100) / 100;
 exports.decimal = decimal;
@@ -28,7 +32,7 @@ exports.getTotalSum = ({sum, vatSum, discount}) => {
 };
 
 exports.displayFormat = (number) => {
-  return numeral(number).format('0,0.0 €');
+  return numeral(number).format('0.00 $');
 };
 
 exports.log = (obj) => JSON.stringify(obj, null, 2);

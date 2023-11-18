@@ -69,11 +69,15 @@ block content
             td.p-2= bill.date.toLocaleDateString("et-EE")
             td(class="p-2 text-left hover:underline")
               a(href=`/edit-bill?id=${bill._id}`) Vaata
+    .my-2
+       label.mr-2 Arvete summa kokku:
+       span=member.billTotal
+      
   else
     p Liikmel puuduvad arved
 
   if member.payments && member.payments.length > 0
-    h3.text-xl.mt-8 Liikme sissemaksed
+    h3.text-xl.mt-16.mb-4 Liikme sissemaksed
     a(href="/add-payment?id=" + member.id class="hover:bg-gray-200").p-2.border.rounded.mt-2.inline-block Lisa uus makse
 
     table.sortable.my-4
@@ -98,11 +102,16 @@ block content
                 span -
             td.p-2(class="hover:underline")
               a(href=`/edit-payment?paymentId=${payment._id}&memberId=${member.id}`) Vaata
+
+    .my-2
+       label.mr-2 Sissemaksed kokku:
+       span=member.paymentTotal
+      
   else
     h3.text-lg.mt-8 Liikmel puuduvad sissemaksed
     a(href="/add-payment?id=" + member.id).p-2.border.rounder.mt-2.inline-block Lisa uus makse
 
-  a(class="bg-red-500 mt-20 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member.id}`) Kustuta liige
+  a(class="bg-red-500 mt-40 mb-10 block text-white w-32 p-1 text-center rounded hover:bg-red-400" href=`/delete-member?id=${member.id}`) Kustuta liige
 
   script.
     const input = document.getElementById("search");

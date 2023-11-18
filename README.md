@@ -10,8 +10,9 @@ Prequisites:
 
 ## Deployment
 
-1. download/update images with `docker-compose pull`
-2. build application with `docker-compose build`
-3. start application with `docker-compose up -d`
+1. download/update external images (mongo) with `docker-compose pull`
+2. build local applications with `docker-compose build`
+3. start everything with `docker-compose up -d`
+3.1 (Optional) Start the app without the `-d` flag and verify that all services start correctly
 
 For updates/maintenance stop application with `docker-compose down`

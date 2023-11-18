@@ -50,7 +50,9 @@ exports.editMember = async (req, res) => {
 
       return a.paid - b.paid;
     }),
+    billTotal: utils.displayFormat(member.bills.reduce((acc, bill) => acc + utils.getTotalSum(bill), 0)),
     payments: member.payments,
+    paymentTotal: utils.displayFormat(member.payments.reduce((acc, payment) => acc + payment.sum, 0)),
   };
 
   res.render("editMember", { title: "Muuda liikme andmeid", member: displayData });

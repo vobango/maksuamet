@@ -2,7 +2,7 @@ extends layout
 
 block variables
   - var idCode = member.details.idCode
-  - var bDayFromIdCode = idCode ? idCode.substring(5, 7) + "." + idCode.substring(3, 5) : ""
+  - var bDayFromIdCode = idCode && idCode.length > 7 ? idCode.substring(5, 7) + "." + idCode.substring(3, 5) : ""
   - var birthday = member.details.birthday ? new Date(member.details.birthday).getDate() + "." + (new Date(member.details.birthday).getMonth() < 9 ? "0" : "") + (new Date(member.details.birthday).getMonth() + 1) : bDayFromIdCode
 
 block content

@@ -272,3 +272,31 @@ exports.getBirthdays = async (_, res) => {
 
   res.send({ data });
 }
+
+exports.fixPrepaidBalances = async (_, res) => {
+  const members = await Member.find().populate("bills");
+
+  for (const member of members) {
+    const allBillsInPayments = member.payments.flatMap(payment => payment.bills).map(bill => bill.id);
+    const prePaidBills = member.bills.filter(bill => {
+      return bill.paid > 0 && allBillsInPayments.indexOf(bill._id.toString()) === -1;
+    });
+    let newPayment = null;
+
+    if (prePaidBills.length > 0) {
+      const prePaidSum = prePaidBills.reduce((acc, bill) => acc + utils.decimal(bill.paid), 0);
+      newPayment = {
+        bills: prePaidBills.map(bill => ({ sum: bill.paid, id: bill._id })),
+        sum: prePaidSum,
+        info: "Tasaarveldus vanade arvetega",
+        date: new Date(),
+      };
+      const payments = [...member.payments, newPayment];
+      member.payments = payments;
+
+      await member.save();
+    }
+  }
+
+  res.send({ data: 'ok' })
+}

@@ -34,5 +34,6 @@ router.get("/api/events", catchErrors(billController.getEvents));
 router.get("/api/event", catchErrors(billController.getEventData));
 router.get("/api/totalBalance", catchErrors(billController.getTotalBalance));
 router.get("/api/birthdays", catchErrors(memberController.getBirthdays));
+router.get("/api/fixBalances", catchErrors(memberController.fixPrepaidBalances));
 
 module.exports = router;

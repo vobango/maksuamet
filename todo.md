@@ -29,11 +29,11 @@
 - [x] kontrollida, kas arve lisamine töötab õigesti?
 - [x] summade / soodustuste jms arvutamine
 - [x] andmebaasi korrektne salvestamine
-- [ ] faili upload
+- [x] faili upload
 - [ ] docker image uuendada / uuendamine automatiseerida
 - [x] docker vol lisada
 - [x] Tarmo masinasse asi käima
-- [ ] eraldi front tavakasutaja jaoks
+- [x] eraldi front tavakasutaja jaoks
     - /api otsade pealt võetud info kuvamine lihtsates vaadetes:
     - kasutajate tabel (nimi + bilanss)
     - sündmuste tabel

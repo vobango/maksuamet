@@ -233,6 +233,7 @@ exports.getBirthdays = async (_, res) => {
     return {
       name: member.details.name,
       birthday: member.details.birthday?.toLocaleDateString("et-EE", { day: "numeric", month: "numeric" }) ?? "",
+      active: member.details.active,
     };
   });
 

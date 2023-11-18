@@ -4,7 +4,7 @@ exports.calculateMemberBalance = (member) => {
   const { bills, payments } = member;
 
   const billsTotal = bills.reduce((result, bill) => {
-    const { sum, vatSum, discount } = bill;
+    const { sum, vatSum, discount, paid } = bill;
     const total = numeral(sum).add(vatSum).value();
 
     if (discount) {
@@ -12,7 +12,7 @@ exports.calculateMemberBalance = (member) => {
       return result + amount;
     }
 
-    return result + numeral(total).value();
+    return result + (numeral(total).value() - numeral(paid).value());
   }, 0);
 
   const paymentsTotal = payments.reduce((sum, payment) => {

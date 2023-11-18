@@ -15,8 +15,8 @@ block content
       dt.mx-2 Aktiivseid:
       dd.text-right= members.filter(member => member.details.active).length
 
-      dt.mx-2 Tudengeid:
-      dd.text-right= members.filter(member => member.details.student).length
+      dt.mx-2 Tudengeid (aktiivseid):
+      dd.text-right= members.filter(member => member.details.student && member.details.active).length
     
   .block.mt-8.mb-4
     label.mr-2(for="search") Otsi:

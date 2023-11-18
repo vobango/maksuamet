@@ -43,7 +43,13 @@ exports.editMember = async (req, res) => {
     balance: utils.displayFormat(balanceRaw),
     birthday,
     birthdayRaw,
-    bills: member.bills,
+    bills: member.bills.sort((a, b) => {
+      if (a.paid > 0 && b.paid > 0) {
+        return new Date(b.date) - new Date(a.date);
+      }
+
+      return a.paid - b.paid;
+    }),
     payments: member.payments,
   };
 

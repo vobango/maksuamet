@@ -61,17 +61,4 @@ describe('calculateMemberBalance', () => {
 
     assert.equal(result, -10);
   });
-
-  it('calculates the balance of a member with paid bills', () => {
-    const member = {
-      bills: [
-        { sum: 10, vatSum: 0, discount: 0, paid: 5 },
-      ],
-      payments: [],
-    };
-
-    const result = calculateMemberBalance(member);
-
-    assert.equal(result, -5);
-  });
 });

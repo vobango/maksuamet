@@ -232,7 +232,7 @@ exports.getBirthdays = async (_, res) => {
   const data = members.map(member => {
     return {
       name: member.details.name,
-      birthday: member.details.birthday?.toLocaleDateString("et-EE", { day: "numeric", month: "numeric" }) ?? "",
+      birthday: member.details.birthday?.toLocaleDateString("et-EE", { day: "2-digit", month: "2-digit" }) ?? "",
       active: member.details.active,
     };
   });

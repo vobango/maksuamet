@@ -2,15 +2,28 @@ const fs = require("fs");
 const Member = require("../models/member");
 const Bill = require("../models/bill");
 const utils = require("../helpers");
-const { updateMemberBalance } = require("./bill");
+const { calculateMemberBalance } = require("../helpers/balance");
 
 /*
   * Admin app views
 */
 exports.membersPage = async (_, res) => {
-  const members = await Member.find().sort({'details.active': -1, 'details.name': 1});
+  const members = await Member.find().sort({'details.active': -1, 'details.name': 1}).populate('bills');
+  const displayData = members.map(member => {
+    const balanceRaw = calculateMemberBalance(member);
+    const birthdayRaw = member.details.birthday;
 
-  res.render("members", { title: "Liikmed", members });
+    return {
+      ...member.details,
+      id: member._id,
+      balance: utils.displayFormat(balanceRaw),
+      balanceRaw,
+      birthday: birthdayRaw ? birthdayRaw.toLocaleDateString("et-EE", utils.dateFormatOptions) : "",
+      birthdayRaw,
+    };
+  });
+
+  res.render("members", { title: "Liikmed", members: displayData, calculateMemberBalance });
 };
 
 exports.addMember = (_, res) => {
@@ -19,12 +32,26 @@ exports.addMember = (_, res) => {
 
 exports.editMember = async (req, res) => {
   const member = await Member.findById(req.query.id).populate("bills");
+  const balanceRaw = calculateMemberBalance(member);
+  const birthdayRaw = member.details.birthday;
+  const idCode = member.details.idCode;
+  const bDayFromIdCode = idCode && idCode.length > 7 ? idCode.substring(5, 7) + "." + idCode.substring(3, 5) : "";
+  const birthday = birthdayRaw ? birthdayRaw.toLocaleDateString("et-EE", utils.dateFormatOptions) : bDayFromIdCode;
+  const displayData = {
+    ...member.details,
+    id: member._id,
+    balance: utils.displayFormat(balanceRaw),
+    birthday,
+    birthdayRaw,
+    bills: member.bills,
+    payments: member.payments,
+  };
 
-  res.render("editMember", { title: "Muuda liikme andmeid", member });
+  res.render("editMember", { title: "Muuda liikme andmeid", member: displayData });
 };
 
 exports.updateMember = async (req, res) => {
-  const { name, phone, email, student, active, balance, birthday } = req.body;
+  const { name, phone, email, student, active, birthday } = req.body;
   const idCode = req.body["id-code"];
 
   const details = {
@@ -44,7 +71,7 @@ exports.updateMember = async (req, res) => {
   const member = await Member.findById(req.query.id);
 
   member.details = details;
-  member.balance = parseFloat(balance) || 0;
+
   await member.save();
 
   res.redirect("/members");
@@ -141,8 +168,6 @@ exports.addPayment = async (req, res) => {
 
   await memberData.save();
 
-  await updateMemberBalance(member, sum, utils.ADD);
-
   res.redirect("/members");
 };
 
@@ -163,13 +188,19 @@ exports.updatePayment = async (req, res) => {
   * API endpoint methods
 */
 exports.getMembers = async (_, res) => {
-  const members = await Member.find().sort("balance");
+  const members = await Member.find().populate("bills");
   const data = members.map(member => {
+    const balanceRaw = calculateMemberBalance(member);
     return {
       name: member.details.name,
-      balance: utils.displayFormat(member.balance),
+      balanceRaw,
+      balance: utils.displayFormat(balanceRaw),
       id: member._id,
     };
+  });
+
+  data.sort((a, b) => {
+    return a.balanceRaw - b.balanceRaw;
   });
 
   res.send({ data });
@@ -215,18 +246,8 @@ exports.getMemberDetails = async (req, res) => {
     }).sort((a, b) => {
       return new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime();
     }),
-    balance: utils.displayFormat(member.balance),
+    balance: utils.displayFormat(calculateMemberBalance(member)),
   };
-
-  res.send({ data });
-}
-
-exports.getTotalBalance = async (_, res) => {
-  const members = await Member.find();
-  const sum = members.reduce((sum, member) => {
-    return sum + member.balance;
-  }, 0);
-  const data = utils.displayFormat(sum);
 
   res.send({ data });
 }

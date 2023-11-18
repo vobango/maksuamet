@@ -1,39 +1,23 @@
-const utils = require("../helpers");
-
-exports.calculateBalance = (amount, baseBalance, transaction) => {
-  const value = utils.decimal(amount);
-  let balance = 0;
-
-  if (transaction === utils.ADD) {
-    balance = utils.decimal(baseBalance) + value;
-  }
-
-  if (transaction === utils.SUBTRACT) {
-    balance = utils.decimal(baseBalance) - value;
-  }
-
-  return utils.decimal(balance);
-};
+const numeral = require("numeral");
 
 exports.calculateMemberBalance = (member) => {
   const { bills, payments } = member;
 
-  // Balance = all bills - all payments
-  const billsTotal = bills.reduce((sum, bill) => {
-    const { amount, vatSum, discount } = bill;
-    const total = utils.decimal(amount) + utils.decimal(vatSum);
+  const billsTotal = bills.reduce((result, bill) => {
+    const { sum, vatSum, discount } = bill;
+    const total = numeral(sum).add(vatSum).value();
 
     if (discount) {
-      const amount = total - total * (utils.decimal(discount) / 100);
-      return sum + amount;
+      const amount = total - total * (numeral(discount).value() / 100);
+      return result + amount;
     }
 
-    return sum + utils.decimal(total);
+    return result + numeral(total).value();
   }, 0);
 
   const paymentsTotal = payments.reduce((sum, payment) => {
     return sum + payment.sum;
   }, 0);
 
-  return utils.decimal(billsTotal - paymentsTotal);
+  return numeral(paymentsTotal - billsTotal).value();
 }

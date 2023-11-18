@@ -1,8 +1,5 @@
 extends layout
 
-block variables
-  - var dateOptions = { day: "2-digit", month: "2-digit" }
-
 block content
   h2.text-3xl.mb-3.ml-2 Liikmed
   a(class="m-2 p-1 border rounded border-gray-500 hover:bg-gray-100 cursor-pointer" href="/add-member") + Lisa uus
@@ -13,10 +10,10 @@ block content
       dd.text-right= members.length
 
       dt.mx-2 Aktiivseid:
-      dd.text-right= members.filter(member => member.details.active).length
+      dd.text-right= members.filter(member => member.active).length
 
       dt.mx-2.w-44 Tudengeid (aktiivseid):
-      dd.text-right= members.filter(member => member.details.student && member.details.active).length
+      dd.text-right= members.filter(member => member.student && member.active).length
     
   .block.mt-8.mb-4
     label.mr-2(for="search") Otsi:
@@ -37,27 +34,27 @@ block content
         th.no-sort
     tbody
       each member in members
-        tr(class=`${member.details.active ? 'text-black' : 'text-gray-400'}` id=member._id)
-          td.p-2= member.details.name
-          td.p-2= member.details.email
-          td.p-2 #{member.details.phone || "-"}
-          td.p-2(data-sort=member.details.birthday) #{member.details.birthday ? member.details.birthday.toLocaleDateString("et-EE", dateOptions) : ""}
-          td.p-2= member.details.idCode
-          td.p-2 #{member.details.student ? "+" : ""}
-          td.p-2.text-right(data-sort=parseFloat(member.balance)) #{member.balance.toFixed(2)} €
-          td.p-2 #{member.details.active ? "+" : ""}
+        tr(class=`${member.active ? 'text-black' : 'text-gray-400'}` id=member.id)
+          td.p-2= member.name
+          td.p-2= member.email
+          td.p-2 #{member.phone || "-"}
+          td.p-2(data-sort=member.birthdayRaw) #{member.birthday}
+          td.p-2= member.idCode
+          td.p-2 #{member.student ? "+" : ""}
+          td.p-2.text-right(data-sort=parseFloat(member.balanceRaw)) #{member.balance}
+          td.p-2 #{member.active ? "+" : ""}
           td(class="p-2 hover:underline")
-            a(href=`/edit-member/?id=` + member._id) Detailid
+            a(href=`/edit-member/?id=` + member.id) Detailid
           td(class="p-2 hover:underline")
-            a(href=`/add-payment/?id=` + member._id) Lisa makse
+            a(href=`/add-payment/?id=` + member.id) Lisa makse
 
   script.
     const input = document.getElementById("search");
     const members = !{JSON.stringify(members)};
     input.addEventListener("input", event => {
-      const match = member => member.details.name.toLowerCase().includes(event.target.value.toLowerCase());
+      const match = member => member.name.toLowerCase().includes(event.target.value.toLowerCase());
       const matches = members.filter(match);
       members.forEach(member => {
-        document.getElementById(member._id).style.display = matches.includes(member) ? "table-row" : "none";
+        document.getElementById(member.id).style.display = matches.includes(member) ? "table-row" : "none";
       });
     });

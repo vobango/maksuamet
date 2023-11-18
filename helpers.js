@@ -1,3 +1,7 @@
+const numeral = require("numeral");
+require('numeral/locales/et');
+numeral.locale('et');
+
 exports.menu = [
   { title: "Liikmed", slug: "/members" },
   { title: "Arved", slug: "/bills" },
@@ -10,6 +14,8 @@ exports.defaultDate = () => {
 exports.dateInputValue = (date) => {
   return new Date(date).toJSON().slice(0, 10);
 };
+
+exports.dateFormatOptions = { day: "2-digit", month: "2-digit" };
 
 const decimal = (value) => Math.round(parseFloat(value) * 100) / 100;
 exports.decimal = decimal;
@@ -25,10 +31,7 @@ exports.getTotalSum = ({sum, vatSum, discount}) => {
 };
 
 exports.displayFormat = (number) => {
-  const fixed = parseFloat(number).toFixed(2);
-  const displayNumber = fixed.endsWith(".00") ? fixed.substring(0, fixed.indexOf(".")) : fixed;
-
-  return `${displayNumber} €`;
+  return numeral(number).format('0.00 $');
 };
 
 exports.log = (obj) => JSON.stringify(obj, null, 2);

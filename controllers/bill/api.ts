@@ -1,13 +1,20 @@
 import { Request, Response } from 'express';
 import BillModel from '../../models/bill';
+import MemberModel from '../../models/member';
 import * as utils from '../../utils';
 import { EventData, PopulatedBill } from './types';
-import { calculateTotalBalance } from './apiHelpers';
+import { calculateMemberBalance } from '../../helpers/balance';
+import { MemberDocument } from '../member/types';
 
 export const getTotalBalance = async (_: Request, res: Response): Promise<void> => {
-  const bills = await BillModel.find();
-  const sum = calculateTotalBalance(bills);
-  const data = utils.displayFormat(sum);
+  const members = await MemberModel.find().populate('bills') as unknown as Array<MemberDocument>;
+  
+  const totalBalance = members.reduce((acc, member) => {
+    const memberBalance = calculateMemberBalance(member);
+    return acc + (memberBalance ?? 0);
+  }, 0);
+
+  const data = utils.displayFormat(totalBalance);
 
   res.send({ data });
 };

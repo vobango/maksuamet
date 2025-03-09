@@ -82,7 +82,5 @@ export const deleteBill = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const handleCSVUpload = (req: Request, res: Response): void => {
-  console.log(req);
-
   res.send(req.body);
 }; 

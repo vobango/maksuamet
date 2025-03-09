@@ -30,6 +30,7 @@ export const getMemberDetails = async (req: Request, res: Response): Promise<voi
 
   const data = {
     name: member.details.name,
+    balance: utils.displayFormat(calculateMemberBalance(member)),
     bills: (member.bills as Array<MemberDocument['bills'][0] & { _id: any }>).map(bill => ({
       description: bill.description,
       amount: utils.displayFormat(utils.getTotalSum({ 

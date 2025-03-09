@@ -25,7 +25,7 @@ export const getEvents = async (_: Request, res: Response): Promise<void> => {
       .filter((event): event is NonNullable<typeof event> => event !== null)
       .map(event => ({ 
         name: event.description, 
-        date: new Date(event.date).getTime() 
+        date: new Date(event.date).getTime(),
       })) 
   });
 };

@@ -70,8 +70,8 @@ export const deleteMember = async (req: Request, res: Response): Promise<void> =
     if (bill.file) {
       try {
         fs.unlinkSync(`${__dirname}/../../public/uploads/${bill.file}`);
-      } catch(error) {
-        console.log(error);
+      } catch (error) {
+        res.status(500).send("Error deleting member");
       }
     }
     await BillModel.findByIdAndDelete(bill._id);

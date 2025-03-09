@@ -55,8 +55,8 @@ export const deleteFile = (req: Request, _res: Response, next: NextFunction): vo
   if (filename) {
     try {
       fs.unlinkSync(`${__dirname}/public/uploads/${filename as string}`);
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
+      // Ignore file deletion errors
     }
   }
   next();

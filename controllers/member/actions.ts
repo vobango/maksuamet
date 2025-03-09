@@ -134,6 +134,71 @@ export const addPayment = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const updatePayment = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body);
-  res.send({ data: "ok" });
+  const { bills: selectedBills, amount, info, member, date, paymentId } = req.body;
+  const billIds = Array.isArray(selectedBills) ? selectedBills : selectedBills ? [selectedBills] : [];
+  const bills = billIds.map(id => ({ sum: 0, id }));
+  const sum = utils.decimal(amount);
+  const data = {
+    bills,
+    sum,
+    info,
+    date,
+  };
+
+  const memberData = await MemberModel.findById(member);
+  if (!memberData) {
+    res.status(404).send('Member not found');
+    return;
+  }
+
+  const oldPayment = memberData.payments.find(p => (p as any)._id.toString() === paymentId);
+  if (!oldPayment) {
+    res.status(404).send('Payment not found');
+    return;
+  }
+
+  // Reset the paid amounts from the old payment
+  const oldBillsData = await Promise.all(oldPayment.bills.map(bill => BillModel.findById(bill.id)));
+  for (const billData of oldBillsData) {
+    if (!billData) continue;
+    billData.paid = utils.decimal(billData.paid - (oldPayment.bills.find(b => b.id === (billData as any)._id.toString())?.sum || 0));
+    await billData.save();
+  }
+
+  // Apply the new payment amounts
+  let balance = sum;
+  const billsData = await Promise.all(billIds.map(id => BillModel.findById(id)));
+
+  for (const billData of billsData) {
+    if (!billData) continue;
+
+    const billSum = utils.getTotalSum({ 
+      sum: billData.sum, 
+      vatSum: billData.vatSum || 0, 
+      discount: billData.discount 
+    });
+    const { paid } = billData;
+    const billInPaymentData = bills.find(bill => bill.id === (billData as any)._id.toString());
+
+    const { amountToPay, remainingBalance } = calculatePaymentAmountAndBalance(billSum, paid, balance);
+    
+    if (amountToPay > 0) {
+      billData.paid = utils.decimal(billData.paid + amountToPay);
+      if (billInPaymentData) {
+        billInPaymentData.sum = amountToPay;
+      }
+      balance = remainingBalance;
+    }
+
+    await billData.save();
+  }
+
+  // Update the payment in the array
+  memberData.payments = memberData.payments.map(p => 
+    (p as any)._id.toString() === paymentId ? { ...data, _id: (p as any)._id } : p
+  );
+
+  await memberData.save();
+
+  res.redirect("/members");
 }; 

@@ -76,7 +76,17 @@ export const paymentPage = async (req: Request, res: Response): Promise<void> =>
 
 export const editPayment = async (req: Request, res: Response): Promise<void> => {
   const member = await MemberModel.findById(req.query.memberId).populate("bills") as unknown as MemberDocument;
-  const data = member.payments.find(payment => payment._id.toString() === req.query.paymentId);
+  const data = member.payments.find(payment => (payment as any)._id.toString() === req.query.paymentId);
+  
+  console.log('Payment data:', data);
+  console.log(member.bills.map(bill => bill._id.toString()).includes(data?.bills[0].id.toString()))
+  
 
-  res.render("editPayment", { title: "Muuda makse andmeid", member, data });
+  res.render("editPayment", { 
+    title: "Muuda makse andmeid", 
+    member, 
+    data,
+    paymentId: req.query.paymentId,
+    memberId: req.query.memberId
+  });
 }; 

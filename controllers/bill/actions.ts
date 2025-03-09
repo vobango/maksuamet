@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import BillModel from '../../models/bill';
 import MemberModel from '../../models/member';
-import * as utils from '../../helpers';
+import * as utils from '../../utils';
 import { BillDetails } from './types';
 
 export const createBill = async (req: Request, res: Response): Promise<void> => {
   let { sum, date, description, file, handoverDate, amount, recipients, addVat, discount } = req.body;
+
   sum = parseFloat(sum) || 0;
   discount = parseInt(discount, 10) || 0;
   recipients = Array.isArray(recipients) ? recipients : [recipients];
@@ -25,6 +26,7 @@ export const createBill = async (req: Request, res: Response): Promise<void> => 
   for (const recipient of recipients) {
     const fullDetails = { ...details, recipient };
     const bill = await new BillModel(fullDetails).save();
+
     await MemberModel.findByIdAndUpdate(recipient, { $addToSet: { bills: bill._id } });
   }
 
@@ -33,8 +35,10 @@ export const createBill = async (req: Request, res: Response): Promise<void> => 
 
 export const updateBill = async (req: Request, res: Response): Promise<void> => {
   const bill = await BillModel.findById(req.query.id);
+
   if (!bill) {
-    res.status(404).send('Bill not found');
+    res.status(404).send(`Bill ${req.query.id} not found`);
+
     return;
   }
 
@@ -55,22 +59,30 @@ export const updateBill = async (req: Request, res: Response): Promise<void> => 
   };
 
   Object.assign(bill, newData);
+
   await bill.save();
+
   res.redirect("/bills");
 };
 
 export const deleteBill = async (req: Request, res: Response): Promise<void> => {
   const bill = await BillModel.findById(req.query.id);
+
   if (!bill) {
-    res.status(404).send('Bill not found');
+    res.status(404).send(`Bill ${req.query.id} not found`);
+
     return;
   }
+
   await MemberModel.findByIdAndUpdate(bill.recipient, { $pull: { bills: bill._id } });
+
   await BillModel.findByIdAndDelete(req.query.id);
+
   res.redirect("/bills");
 };
 
 export const handleCSVUpload = (req: Request, res: Response): void => {
   console.log(req);
+
   res.send(req.body);
 }; 

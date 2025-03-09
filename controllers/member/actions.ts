@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import MemberModel from '../../models/member';
 import BillModel from '../../models/bill';
-import * as utils from '../../helpers';
+import * as utils from '../../utils';
 import { MemberDetails } from './types';
 
 export const updateMember = async (req: Request, res: Response): Promise<void> => {

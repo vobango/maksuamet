@@ -29,4 +29,11 @@ export interface PopulatedBill extends Document {
       name: string;
     };
   };
+}
+
+export interface Bill {
+  paid: number;
+  sum: number;
+  vatSum?: number;
+  discount: number;
 } 

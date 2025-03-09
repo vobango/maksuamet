@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import BillModel from '../../models/bill';
-import * as utils from '../../helpers';
+import * as utils from '../../utils';
 import { EventData, PopulatedBill } from './types';
+import { calculateTotalBalance } from './apiHelpers';
 
 export const getTotalBalance = async (_: Request, res: Response): Promise<void> => {
   const bills = await BillModel.find();
-  const sum = bills.reduce((result, bill) => {
-    return result + (bill.paid - utils.getTotalSum({ sum: bill.sum, vatSum: bill.vatSum || 0, discount: bill.discount }));
-  }, 0);
+  const sum = calculateTotalBalance(bills);
   const data = utils.displayFormat(sum);
+
   res.send({ data });
 };
 

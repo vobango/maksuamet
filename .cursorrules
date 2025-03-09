@@ -1,3 +1,5 @@
+You are using the Chai and Mocha testing libraries for writing unit tests.
+
 # Naming conventions
 
 - There is no need to prefix Typescript interfaces with "I". Just use the appropriate name without any prefixes

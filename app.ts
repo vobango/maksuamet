@@ -3,7 +3,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routes from './routes';
-import utils from './helpers';
+import * as utils from './utils';
 
 const app = express();
 

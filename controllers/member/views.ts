@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import MemberModel from '../../models/member';
-import * as utils from '../../helpers';
+import * as utils from '../../utils';
 import { calculateMemberBalance } from '../../helpers/balance';
 import { MemberDocument, MemberDisplayData } from './types';
 

@@ -1,0 +1,3 @@
+# Naming conventions
+
+- There is no need to prefix Typescript interfaces with "I". Just use the appropriate name without any prefixes

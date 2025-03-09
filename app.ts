@@ -1,9 +1,9 @@
-const express = require("express");
-const path = require("path");
-const bodyParser = require("body-parser");
-const routes = require("./routes");
-const utils = require("./helpers");
-const cors = require('cors');
+import express, { Request, Response, NextFunction } from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import routes from './routes';
+import utils from './helpers';
 
 const app = express();
 
@@ -25,10 +25,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Make utilities available in templates/controllers
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.utils = utils;
-  res.locals.currentPath = req.path
-
+  res.locals.currentPath = req.path;
   next();
 });
 
@@ -37,4 +36,4 @@ app.use("/", routes);
 
 app.use(utils.errorHandler);
 
-module.exports = app;
+export default app; 

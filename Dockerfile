@@ -1,19 +1,28 @@
 # Select Node.js version
-FROM node:16-slim
+FROM node:18-slim
+
 # Create app directory
 WORKDIR /app
-#Set evironment defaults
+
+# Set environment defaults
 ARG BUILD_TIME_ARGUMENT
 ENV MY_ENV="The tag is ${BUILD_TIME_ARGUMENT}"
-#Startup command
-ENTRYPOINT ["node"]
 
-# Start app
-CMD ["server.js"]
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
 
 # Copy source code
-COPY . /app
+COPY . .
 
-#Build application
-RUN npm install
+# Build TypeScript
+RUN npm run build
+
+# Expose port
+EXPOSE 8001
+
+# Start app
+CMD ["node", "dist/server.js"]
 

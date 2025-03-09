@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { calculateTotalBalance } from './apiHelpers';
+import { calculateTotalBalance, calculatePaymentAmountAndBalance } from './apiHelpers';
 import { Bill } from './types';
 
 describe('calculateTotalBalance', () => {
@@ -49,5 +49,31 @@ describe('calculateTotalBalance', () => {
   it('should return 0 for empty bills array', () => {
     const balance = calculateTotalBalance([]);
     expect(balance).to.equal(0);
+  });
+});
+
+describe('calculatePaymentAmountAndBalance', () => {
+  it('should return full unpaid amount when balance is sufficient', () => {
+    const result = calculatePaymentAmountAndBalance(100, 60, 50);
+    expect(result.amountToPay).to.equal(40);
+    expect(result.remainingBalance).to.equal(10);
+  });
+
+  it('should return partial amount when balance is insufficient', () => {
+    const result = calculatePaymentAmountAndBalance(100, 60, 30);
+    expect(result.amountToPay).to.equal(30);
+    expect(result.remainingBalance).to.equal(0);
+  });
+
+  it('should return zero amount when bill is fully paid', () => {
+    const result = calculatePaymentAmountAndBalance(100, 100, 50);
+    expect(result.amountToPay).to.equal(0);
+    expect(result.remainingBalance).to.equal(50);
+  });
+
+  it('should return zero amount when balance is zero', () => {
+    const result = calculatePaymentAmountAndBalance(100, 60, 0);
+    expect(result.amountToPay).to.equal(0);
+    expect(result.remainingBalance).to.equal(0);
   });
 }); 

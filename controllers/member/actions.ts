@@ -4,6 +4,7 @@ import MemberModel from '../../models/member';
 import BillModel from '../../models/bill';
 import * as utils from '../../utils';
 import { MemberDetails } from './types';
+import { calculatePaymentAmountAndBalance } from '../bill/apiHelpers';
 
 export const updateMember = async (req: Request, res: Response): Promise<void> => {
   const { name, phone, email, student, active, birthday } = req.body;
@@ -112,23 +113,14 @@ export const addPayment = async (req: Request, res: Response): Promise<void> => 
     const { paid } = billData;
     const billInPaymentData = bills.find(bill => bill.id === (billData as any)._id.toString());
 
-    if (paid < billSum) {
-      const amountToPay = utils.decimal(billSum - paid);
-
-      if (amountToPay <= balance) {
-        billData.paid = utils.decimal(billData.paid + amountToPay);
-        if (billInPaymentData) {
-          billInPaymentData.sum = amountToPay;
-        }
-        balance = utils.decimal(balance - amountToPay);
-      } else if (balance > 0) {
-        const paidSum = utils.decimal(balance);
-        billData.paid = utils.decimal(billData.paid + paidSum);
-        if (billInPaymentData) {
-          billInPaymentData.sum = paidSum;
-        }
-        balance = 0;
+    const { amountToPay, remainingBalance } = calculatePaymentAmountAndBalance(billSum, paid, balance);
+    
+    if (amountToPay > 0) {
+      billData.paid = utils.decimal(billData.paid + amountToPay);
+      if (billInPaymentData) {
+        billInPaymentData.sum = amountToPay;
       }
+      balance = remainingBalance;
     }
 
     await billData.save();

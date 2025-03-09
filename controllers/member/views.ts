@@ -72,4 +72,11 @@ export const paymentPage = async (req: Request, res: Response): Promise<void> =>
     return;
   }
   res.render("addPayment", { title: "Lisa sissemakse", member });
+};
+
+export const editPayment = async (req: Request, res: Response): Promise<void> => {
+  const member = await MemberModel.findById(req.query.memberId).populate("bills") as unknown as MemberDocument;
+  const data = member.payments.find(payment => payment._id.toString() === req.query.paymentId);
+
+  res.render("editPayment", { title: "Muuda makse andmeid", member, data });
 }; 

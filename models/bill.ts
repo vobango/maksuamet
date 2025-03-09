@@ -1,5 +1,5 @@
 import mongoose, { Document } from 'mongoose';
-import AutoIncrement from 'mongoose-sequence';
+import sequence from './sequence';
 
 export interface Bill extends Document {
   date: Date;
@@ -49,7 +49,7 @@ const billSchema = new mongoose.Schema<Bill>({
   }
 });
 
-billSchema.plugin(AutoIncrement, { inc_field: "billNumber", start_seq: 1000 });
+billSchema.plugin(sequence, { inc_field: "billNumber", start_seq: 1000 });
 
 const BillModel = mongoose.model<Bill>("Bill", billSchema);
 

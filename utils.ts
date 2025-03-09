@@ -58,9 +58,16 @@ export const ADD = "ADD";
 export const SUBTRACT = "SUBTRACT";
 export const VAT = 0.2;
 
-export const catchErrors = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
+export const catchErrors = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any> | void) => {
   return function(req: Request, res: Response, next: NextFunction) {
-    return fn(req, res, next).catch(next);
+    try {
+      const result = fn(req, res, next);
+      if (result && result instanceof Promise) {
+        return result.catch(next);
+      }
+    } catch (error) {
+      next(error);
+    }
   };
 };
 

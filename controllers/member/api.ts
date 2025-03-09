@@ -62,4 +62,48 @@ export const getMemberDetails = async (req: Request, res: Response): Promise<voi
   };
 
   res.send({ data });
+};
+
+export const getBirthdays = async (_: Request, res: Response): Promise<void> => {
+  const members = await MemberModel.find();
+
+  const data = members.map(member => ({
+    name: member.details.name,
+    birthday: member.details.birthday?.toLocaleDateString("et-EE", { day: "2-digit", month: "2-digit" }) ?? "",
+    active: member.details.active,
+  }));
+
+  res.send({ data });
+};
+
+export const fixPrepaidBalances = async (_: Request, res: Response): Promise<void> => {
+  const members = await MemberModel.find().populate("bills") as unknown as Array<MemberDocument>;
+
+  for (const member of members) {
+    try {
+      const allBillsInPayments = member.payments.flatMap(payment => payment.bills).map(bill => bill.id);
+      const prePaidBills = (member.bills as Array<MemberDocument['bills'][0] & { _id: any }>).filter(bill => {
+        return bill.paid > 0 && allBillsInPayments.indexOf(bill._id.toString()) === -1;
+      });
+
+      if (prePaidBills.length > 0) {
+        const prePaidSum = prePaidBills.reduce((acc, bill) => acc + utils.decimal(bill.paid), 0);
+        const newPayment = {
+          bills: prePaidBills.map(bill => ({ sum: bill.paid, id: bill._id })),
+          sum: prePaidSum,
+          info: "Tasaarveldus vanade arvetega",
+          date: new Date(),
+        };
+
+        const payments = [...member.payments, newPayment];
+        member.payments = payments;
+        await member.save();
+      }
+    } catch (e) {
+      res.send(e);
+      return;
+    }
+  }
+
+  res.send({ data: 'ok' });
 }; 

@@ -1,11 +1,18 @@
 declare module 'mongoose-sequence' {
   import { Schema } from 'mongoose';
-
-  interface AutoIncrementOptions {
+  
+  interface SequenceOptions {
     inc_field: string;
+    id?: string;
     start_seq?: number;
+    inc_amount?: number;
+    reference_fields?: string[];
   }
 
-  function autoIncrement(schema: Schema, options: AutoIncrementOptions): void;
-  export default autoIncrement;
+  interface AutoIncrement {
+    (schema: Schema, options: SequenceOptions): void;
+  }
+
+  const AutoIncrement: AutoIncrement;
+  export default AutoIncrement;
 } 

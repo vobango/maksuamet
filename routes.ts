@@ -1,8 +1,8 @@
 import express from 'express';
-import controllers from './controllers';
-import billController from './controllers/bill';
-import memberController from './controllers/member';
-import { catchErrors } from './helpers';
+import * as controllers from './controllers';
+import * as billController from './controllers/bill';
+import * as memberController from './controllers/member';
+import { catchErrors } from './utils';
 
 const router = express.Router();
 

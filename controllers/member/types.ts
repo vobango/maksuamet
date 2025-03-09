@@ -19,15 +19,7 @@ export interface MemberDisplayData {
     date: Date;
   }>;
   billTotal: string;
-  payments: Array<{
-    date: Date;
-    sum: number;
-    info: string;
-    bills: Array<{
-      sum: number;
-      id: string;
-    }>;
-  }>;
+  payments: Array<Payment>;
   paymentTotal: string;
 }
 
@@ -43,9 +35,9 @@ export interface MemberDetails {
 
 export interface Payment {
   _id?: any;
-  date: Date;
+  date?: Date;
   sum: number;
-  info: string;
+  info?: string;
   bills: Array<{
     sum: number;
     id: string;

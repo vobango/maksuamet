@@ -51,7 +51,7 @@ export const getMemberDetails = async (req: Request, res: Response): Promise<voi
       description: item.info,
       amount: utils.displayFormat(item.sum),
       dateTime: item.date,
-      date: item.date.toLocaleDateString("et-EE"),
+      date: item.date?.toLocaleDateString("et-EE"),
       bills: item.bills.map(bill => ({
         description: member.bills.find(billData => 
           billData._id.toString() === bill.id.toString()

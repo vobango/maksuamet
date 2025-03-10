@@ -7,7 +7,7 @@
     "dev": "npm run tailwind:css && nodemon --exec ts-node server.ts",
     "start": "node dist/server.js",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/styles.css",
-    "build": "tsc",
+    "build": "tsc && cp -r views dist/ && cp -r public dist/",
     "test": "mocha --require ts-node/register/transpile-only --project tsconfig.test.json --watch '{,!(node_modules)/**/}*.test.ts'"
   },
   "repository": {

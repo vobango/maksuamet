@@ -11,8 +11,8 @@ ENV MY_ENV="The tag is ${BUILD_TIME_ARGUMENT}"
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install production dependencies only
+RUN npm ci --only=production
 
 # Copy source code
 COPY . .

@@ -2,15 +2,8 @@ import { Request, Response } from 'express';
 import BillModel from '../../models/bill';
 import MemberModel from '../../models/member';
 import * as utils from '../../utils';
-import { BillDetails } from './types';
+import { BillDetails, BillDocument } from './types';
 import { MemberDocument } from '../member/types';
-import { Document } from 'mongoose';
-
-interface BillDocument extends Document {
-  _id: any;
-  paid: number;
-  recipient: any;
-}
 
 const getAvailablePaymentBalance = (payment: any): number => {
   const totalPaidFromPayment = payment.bills.reduce((acc: number, bill: any) => acc + bill.sum, 0);
@@ -89,11 +82,10 @@ export const createBill = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const updateBill = async (req: Request, res: Response): Promise<void> => {
-  const bill = await BillModel.findById(req.query.id);
+  const bill = await BillModel.findById(req.query.id) as BillDocument;
 
   if (!bill) {
     res.status(404).send(`Bill ${req.query.id} not found`);
-
     return;
   }
 
@@ -101,7 +93,103 @@ export const updateBill = async (req: Request, res: Response): Promise<void> => 
   const sum = parseFloat(req.body.sum) || 0;
   const vatSum = addVat ? sum * utils.VAT : 0;
   const discount = parseInt(req.body.discount, 10) || 0;
-  const paid = parseFloat(req.body.paid) || 0;
+  
+  const oldTotalSum = utils.getTotalSum({ sum: bill.sum, vatSum: bill.vatSum, discount: bill.discount });
+  const newTotalSum = utils.getTotalSum({ sum, vatSum, discount });
+  
+  // If total sum hasn't changed, no need to adjust payments
+  if (oldTotalSum === newTotalSum) {
+    // Just update the bill data and save
+    const newData = {
+      vatSum,
+      sum,
+      discount,
+      date,
+      handoverDate,
+      amount: parseInt(amount, 10) || 1,
+      description,
+      paid: bill.paid // Keep existing paid amount since total hasn't changed
+    };
+
+    Object.assign(bill, newData);
+    await bill.save();
+
+    res.redirect("/bills");
+
+    return;
+  }
+
+  // Get member with payments
+  const member = await MemberModel.findById(bill.recipient) as unknown as MemberDocument;
+  
+  // Find payments that have this bill
+  const paymentsWithBill = member.payments.filter(payment => 
+    payment.bills.some(b => b.id.toString() === bill._id.toString())
+  );
+
+  if (newTotalSum < oldTotalSum) {
+    // If bill total decreased, reduce payment amounts proportionally
+    const reduction = oldTotalSum - newTotalSum;
+    
+    for (const payment of paymentsWithBill) {
+      const billInPayment = payment.bills.find(b => b.id.toString() === bill._id.toString());
+      if (billInPayment) {
+        billInPayment.sum = Math.max(0, billInPayment.sum - reduction);
+      }
+    }
+  } else if (newTotalSum > oldTotalSum) {
+    // If bill total increased, try to cover the increase with existing or new payments
+    const increase = newTotalSum - oldTotalSum;
+    let remainingIncrease = increase;
+
+    // First try to use existing payments that already have this bill
+    for (const payment of paymentsWithBill) {
+      const availableBalance = getAvailablePaymentBalance(payment);
+      if (availableBalance > 0 && remainingIncrease > 0) {
+        const amountToApply = Math.min(availableBalance, remainingIncrease);
+        const billInPayment = payment.bills.find(b => b.id.toString() === bill._id.toString());
+        if (billInPayment) {
+          billInPayment.sum += amountToApply;
+          remainingIncrease -= amountToApply;
+        }
+      }
+    }
+
+    // If there's still remaining increase, look for new payments
+    if (remainingIncrease > 0) {
+      const availablePayments = member.payments
+        .filter(payment => !payment.bills.some(b => b.id.toString() === bill._id.toString()))
+        .map(payment => ({
+          payment,
+          availableBalance: getAvailablePaymentBalance(payment)
+        }))
+        .filter(({ availableBalance }) => availableBalance > 0)
+        .sort((a, b) => {
+          const dateA = a.payment.date ? new Date(a.payment.date).getTime() : 0;
+          const dateB = b.payment.date ? new Date(b.payment.date).getTime() : 0;
+          return dateA - dateB;
+        });
+
+      for (const { payment, availableBalance } of availablePayments) {
+        if (remainingIncrease <= 0) break;
+        
+        const amountToApply = Math.min(availableBalance, remainingIncrease);
+        payment.bills.push({
+          id: bill._id.toString(),
+          sum: amountToApply
+        });
+        
+        remainingIncrease -= amountToApply;
+      }
+    }
+  }
+
+  // Calculate total paid amount from all payments
+  const totalPaid = member.payments.reduce((acc, payment) => {
+    const billPayment = payment.bills.find(b => b.id.toString() === bill._id.toString());
+    return acc + (billPayment?.sum || 0);
+  }, 0);
+
   const newData = {
     vatSum,
     sum,
@@ -110,11 +198,13 @@ export const updateBill = async (req: Request, res: Response): Promise<void> => 
     handoverDate,
     amount: parseInt(amount, 10) || 1,
     description,
-    paid,
+    paid: totalPaid
   };
 
   Object.assign(bill, newData);
 
+  // Save both member and bill
+  await member.save();
   await bill.save();
 
   res.redirect("/bills");

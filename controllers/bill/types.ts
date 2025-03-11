@@ -1,5 +1,14 @@
 import { Document } from 'mongoose';
 
+export interface BillDocument extends Document {
+  _id: any;
+  paid: number;
+  recipient: any;
+  sum: number;
+  vatSum: number;
+  discount: number;
+}
+
 export interface BillDetails {
   description: string;
   date: string;

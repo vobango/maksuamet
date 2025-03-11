@@ -3,6 +3,18 @@ import BillModel from '../../models/bill';
 import MemberModel from '../../models/member';
 import * as utils from '../../utils';
 import { BillDetails } from './types';
+import { MemberDocument } from '../member/types';
+import { Document } from 'mongoose';
+
+interface BillDocument extends Document {
+  _id: any;
+  paid: number;
+}
+
+const getAvailablePaymentBalance = (payment: any): number => {
+  const totalPaidFromPayment = payment.bills.reduce((acc: number, bill: any) => acc + bill.sum, 0);
+  return payment.sum - totalPaidFromPayment;
+};
 
 export const createBill = async (req: Request, res: Response): Promise<void> => {
   let { sum, date, description, file, handoverDate, amount, recipients, addVat, discount } = req.body;
@@ -12,6 +24,8 @@ export const createBill = async (req: Request, res: Response): Promise<void> => 
   recipients = Array.isArray(recipients) ? recipients : [recipients];
 
   const vatSum = addVat ? sum * utils.VAT : 0;
+  const totalSum = utils.getTotalSum({ sum, vatSum, discount });
+
   const details: BillDetails = {
     description,
     date,
@@ -20,14 +34,54 @@ export const createBill = async (req: Request, res: Response): Promise<void> => 
     amount,
     sum,
     vatSum,
-    file
+    file,
+    paid: 0
   };
 
   for (const recipient of recipients) {
     const fullDetails = { ...details, recipient };
-    const bill = await new BillModel(fullDetails).save();
+    const bill = await new BillModel(fullDetails).save() as BillDocument;
+    
+    // Get member with payments
+    const member = await MemberModel.findById(recipient) as unknown as MemberDocument;
+    
+    // Find payments with remaining balance and sort by date
+    let remainingBillAmount = totalSum;
+    const availablePayments = member.payments
+      .map(payment => ({
+        payment,
+        availableBalance: getAvailablePaymentBalance(payment)
+      }))
+      .filter(({ availableBalance }) => availableBalance > 0)
+      .sort((a, b) => {
+        const dateA = a.payment.date ? new Date(a.payment.date).getTime() : 0;
+        const dateB = b.payment.date ? new Date(b.payment.date).getTime() : 0;
+        return dateA - dateB;
+      });
 
-    await MemberModel.findByIdAndUpdate(recipient, { $addToSet: { bills: bill._id } });
+    for (const { payment, availableBalance } of availablePayments) {
+      if (remainingBillAmount <= 0) break;
+      
+      const amountToApply = Math.min(availableBalance, remainingBillAmount);
+      
+      // Update the bill's paid amount
+      bill.paid = (bill.paid || 0) + amountToApply;
+      
+      // Add bill to payment's bills array
+      payment.bills.push({
+        id: bill._id.toString(),
+        sum: amountToApply
+      });
+      
+      remainingBillAmount -= amountToApply;
+    }
+    
+    // Add bill to member's bills array and save all member changes
+    member.bills.push(bill._id);
+    await member.save();
+    
+    // Save the bill
+    await bill.save();
   }
 
   res.redirect("/bills");

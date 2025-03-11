@@ -1,14 +1,15 @@
 import { Document } from 'mongoose';
 
 export interface BillDetails {
-  description?: string;
+  description: string;
   date: string;
   discount: number;
-  handoverDate: string;
-  amount: number;
+  handoverDate?: string;
+  amount?: number;
   sum: number;
   vatSum: number;
   file?: string;
+  paid?: number;
 }
 
 export interface EventData {

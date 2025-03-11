@@ -9,6 +9,7 @@ import { Document } from 'mongoose';
 interface BillDocument extends Document {
   _id: any;
   paid: number;
+  recipient: any;
 }
 
 const getAvailablePaymentBalance = (payment: any): number => {
@@ -120,16 +121,29 @@ export const updateBill = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const deleteBill = async (req: Request, res: Response): Promise<void> => {
-  const bill = await BillModel.findById(req.query.id);
+  const bill = await BillModel.findById(req.query.id) as BillDocument;
 
   if (!bill) {
     res.status(404).send(`Bill ${req.query.id} not found`);
-
     return;
   }
 
-  await MemberModel.findByIdAndUpdate(bill.recipient, { $pull: { bills: bill._id } });
+  // Get member with payments
+  const member = await MemberModel.findById(bill.recipient) as unknown as MemberDocument;
+  
+  // Remove bill from member's bills array
+  member.bills = member.bills.filter(b => b.toString() !== bill._id.toString());
+  
+  // Remove bill from any payments that reference it
+  member.payments = member.payments.map(payment => ({
+    ...payment,
+    bills: payment.bills.filter(b => b.id.toString() !== bill._id.toString())
+  }));
 
+  // Save member changes
+  await member.save();
+
+  // Delete the bill
   await BillModel.findByIdAndDelete(req.query.id);
 
   res.redirect("/bills");

@@ -42,6 +42,7 @@ services:
       API_URL: http://api:8001
       USER_KOOR: ${USER_KOOR}
       USER_ADMIN: ${USER_ADMIN}
+      USER_RYHMAVANEM: ${USER_RYHMAVANEM}
     links:
       - api
     networks:

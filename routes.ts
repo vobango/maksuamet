@@ -1,8 +1,9 @@
-const express = require("express");
-const controllers = require("./controllers");
-const billController = require("./controllers/bill");
-const memberController = require("./controllers/member");
-const { catchErrors } = require("./helpers");
+import express from 'express';
+import * as controllers from './controllers';
+import * as billController from './controllers/bill';
+import * as memberController from './controllers/member';
+import { catchErrors } from './utils';
+
 const router = express.Router();
 
 // Admin app
@@ -36,4 +37,4 @@ router.get("/api/totalBalance", catchErrors(billController.getTotalBalance));
 router.get("/api/birthdays", catchErrors(memberController.getBirthdays));
 router.get("/api/fixBalances", catchErrors(memberController.fixPrepaidBalances));
 
-module.exports = router;
+export default router; 

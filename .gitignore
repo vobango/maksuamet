@@ -3,3 +3,4 @@ mongo-volume/
 node_modules/
 public/uploads/*
 .DS_Store
+dist/

@@ -1,9 +1,16 @@
 import { Request, Response } from 'express';
 import BillModel from '../../models/bill';
 import MemberModel from '../../models/member';
+import {displayFormat} from '../../utils';
 
 export const billsPage = async (_: Request, res: Response): Promise<void> => {
-  const bills = await BillModel.find().populate('recipient').sort({ date: -1, billNumber: -1 });
+  const data = await BillModel.find().populate('recipient').sort({ date: -1, billNumber: -1 });
+  const bills = data.map(bill => {
+    return {
+      ...bill,
+      paid: displayFormat(bill.paid)
+    }
+  })
 
   res.render("bills", { title: "Arved", bills });
 };

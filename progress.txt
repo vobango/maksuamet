@@ -1,0 +1,13 @@
+## Phase 3a — Fix multer security vulnerability (2026-03-10)
+
+Task: Upgrade multer to fix high-severity dicer crash vulnerability (GHSA-wm7h-9275-46v2).
+
+Changes:
+- multer: 1.4.4-lts.1 → 2.1.1
+- @types/multer: 1.4.11 → 2.1.0
+
+API compatibility: Full. controllers.ts uses diskStorage, .single(), and multer.Options —
+all still available and type-compatible in v2. No source code changes needed.
+
+Result: npm audit drops from 5 high-severity vulnerabilities to 2 (remaining: mocha/serialize-javascript).
+TypeScript type-check: clean. All 12 tests pass.

@@ -35,3 +35,16 @@ Changes:
 
 Result: TypeScript type-check: clean. All 12 tests pass.
 
+## Phase 5a — Upgrade uuid 9 → 10 (2026-03-10)
+
+Task: Upgrade uuid to latest CJS-compatible major version.
+
+Changes:
+- uuid: 9.0.1 → 10.0.0
+- @types/uuid: 9.0.8 → 10.0.0
+
+Note: uuid v11+ dropped CommonJS support ("type": "module"). Since this project
+uses module:commonjs in tsconfig, v10 is the maximum safe upgrade. The import
+style (import uuid from 'uuid'; uuid.v4()) remains fully compatible with v10.
+
+Result: TypeScript type-check: clean. All 12 tests pass.

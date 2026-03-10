@@ -32,7 +32,7 @@ Completed phases are documented in `progress.txt`.
 - TypeScript type-check: clean. All 12 tests pass.
 
 ### Phase 5 — Other major version upgrades (LOW)
-- `uuid` 9 → 13
+- `uuid` 9 → 10 ✅ (v11+ is ESM-only, incompatible with module:commonjs)
 - `dotenv` 16 → 17
 - `mongoose` 8 → 9 (risky — significant breaking changes)
 - `tailwindcss` 3 → 4 (risky — significant config changes)

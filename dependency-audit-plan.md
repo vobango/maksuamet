@@ -35,6 +35,6 @@ Completed phases are documented in `progress.txt`.
 - `uuid` 9 → 10 ✅ (v11+ is ESM-only, incompatible with module:commonjs)
 - `dotenv` 16 → 17 ✅
 - `mongoose` 8 → 9 ✅ (removed deprecated connection options)
-- `tailwindcss` 3 → 4 (risky — significant config changes)
+- `tailwindcss` 3 → 4 ✅
 - `express` 4 → 5 ✅
 - Evaluate each separately

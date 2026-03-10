@@ -36,5 +36,5 @@ Completed phases are documented in `progress.txt`.
 - `dotenv` 16 → 17 ✅
 - `mongoose` 8 → 9 (risky — significant breaking changes)
 - `tailwindcss` 3 → 4 (risky — significant config changes)
-- `express` 4 → 5
+- `express` 4 → 5 ✅
 - Evaluate each separately

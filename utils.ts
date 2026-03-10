@@ -71,7 +71,7 @@ export const catchErrors = (fn: (req: Request, res: Response, next: NextFunction
   };
 };
 
-export const errorHandler = (err: Error, _: Request, res: Response): void => {
+export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
   if (res.status) {
     res.status((err as any).status || 500).render('error', { message: err.message });
   }

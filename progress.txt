@@ -59,3 +59,16 @@ API compatibility: Full. Project uses `import dotenv from 'dotenv'` and `dotenv.
 both of which remain unchanged in v17.
 
 Result: TypeScript type-check: clean. All 12 tests pass.
+## Phase 5c — Upgrade express 4 → 5 (2026-03-10)
+
+Task: Upgrade express from ^4.18.2 to ^5.2.1.
+
+Changes:
+- express: 4.22.1 → 5.2.1
+- utils.ts: errorHandler signature updated to include required `next: NextFunction`
+  parameter (Express 5 enforces 4-parameter error middleware)
+
+API compatibility: Full. Routes, middleware, and request/response handling are
+unchanged. body-parser continues to work as a separate package in Express 5.
+
+Result: TypeScript type-check: clean. All 12 tests pass.

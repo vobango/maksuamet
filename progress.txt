@@ -48,3 +48,14 @@ uses module:commonjs in tsconfig, v10 is the maximum safe upgrade. The import
 style (import uuid from 'uuid'; uuid.v4()) remains fully compatible with v10.
 
 Result: TypeScript type-check: clean. All 12 tests pass.
+## Phase 5b — Upgrade dotenv 16 → 17 (2026-03-10)
+
+Task: Upgrade dotenv to latest major version.
+
+Changes:
+- dotenv: 16.4.5 → 17.3.1
+
+API compatibility: Full. Project uses `import dotenv from 'dotenv'` and `dotenv.config()`,
+both of which remain unchanged in v17.
+
+Result: TypeScript type-check: clean. All 12 tests pass.

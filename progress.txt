@@ -26,3 +26,12 @@ respectively) for all transitive consumers.
 Result: npm audit drops from 2 high-severity vulnerabilities to 0.
 All 12 tests pass. TypeScript type-check: clean.
 
+## Phase 4 — Upgrade @types/express 4.x → 5.x (2026-03-10)
+
+Task: Upgrade @types/express from ^4.17.21 to ^5.0.6 for up-to-date Express 5 type definitions.
+
+Changes:
+- @types/express: 4.17.21 → 5.0.6
+
+Result: TypeScript type-check: clean. All 12 tests pass.
+

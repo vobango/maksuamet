@@ -27,10 +27,9 @@ Completed phases are documented in `progress.txt`.
 - npm audit now reports 0 vulnerabilities
 - All 12 tests pass
 
-### Phase 4 — @types/express 4.x → 5.x (MEDIUM)
-- Upgrade `@types/express` from `^4.17.21` to `^5.0.6`
-- Verify no type errors introduced
-- Run type-check and tests
+### Phase 4 — @types/express 4.x → 5.x (MEDIUM) ✅
+- Upgraded `@types/express` from `^4.17.21` to `^5.0.6`
+- TypeScript type-check: clean. All 12 tests pass.
 
 ### Phase 5 — Other major version upgrades (LOW)
 - `uuid` 9 → 13

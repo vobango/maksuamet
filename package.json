@@ -21,6 +21,10 @@
     "url": "https://github.com/vobango/maksuamet/issues"
   },
   "homepage": "https://github.com/vobango/maksuamet#readme",
+  "overrides": {
+    "serialize-javascript": "^7.0.3",
+    "diff": "^8.0.3"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -46,7 +50,7 @@
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.17",
     "chai": "^5.2.0",
-    "mocha": "^10.3.0",
+    "mocha": "^11.7.5",
     "nodemon": "^3.0.3",
     "postcss": "^8.4.35",
     "postcss-cli": "^11.0.0",

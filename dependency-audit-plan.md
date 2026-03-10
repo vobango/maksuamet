@@ -21,11 +21,11 @@ Completed phases are documented in `progress.txt`.
 - API in `controllers.ts` is fully compatible; no code changes needed
 - Type-check and all 12 tests pass
 
-### Phase 3b — Fix mocha serialize-javascript vulnerability (HIGH)
-- npm audit flags `serialize-javascript <=7.0.2` via mocha 8–12.0.0-beta-2
-- Upgrade `mocha` from `^10.3.0` to `^11.7.5` and verify no breaking changes
-- Update test script if needed
-- Run type-check and tests
+### Phase 3b — Fix mocha serialize-javascript vulnerability (HIGH) ✅
+- Upgraded `mocha` from `^10.3.0` to `^11.7.5`
+- Added npm `overrides` to force `serialize-javascript: ^7.0.3` and `diff: ^8.0.3`
+- npm audit now reports 0 vulnerabilities
+- All 12 tests pass
 
 ### Phase 4 — @types/express 4.x → 5.x (MEDIUM)
 - Upgrade `@types/express` from `^4.17.21` to `^5.0.6`

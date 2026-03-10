@@ -11,3 +11,18 @@ all still available and type-compatible in v2. No source code changes needed.
 
 Result: npm audit drops from 5 high-severity vulnerabilities to 2 (remaining: mocha/serialize-javascript).
 TypeScript type-check: clean. All 12 tests pass.
+## Phase 3b — Fix mocha serialize-javascript vulnerability (2026-03-10)
+
+Task: Upgrade mocha and fix high-severity serialize-javascript vulnerability (GHSA-5c6j-r48x-rmvq).
+
+Changes:
+- mocha: 10.3.0 → 11.7.5
+- Added npm overrides: serialize-javascript ^7.0.3, diff ^8.0.3
+
+Rationale: mocha 11.7.5 still bundles serialize-javascript ^6.0.2 and diff ^7.0.0 (both
+vulnerable). npm overrides forces installation of patched versions (7.0.4 and 8.0.3
+respectively) for all transitive consumers.
+
+Result: npm audit drops from 2 high-severity vulnerabilities to 0.
+All 12 tests pass. TypeScript type-check: clean.
+

@@ -4,5 +4,6 @@ node_modules/
 public/uploads/*
 .DS_Store
 dist/
+public/styles/styles.css
 .serena/
 .claude/

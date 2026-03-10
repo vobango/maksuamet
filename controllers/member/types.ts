@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface MemberDisplayData {
   name: string;
@@ -45,7 +45,7 @@ export interface Payment {
 }
 
 export interface MemberDocument extends Document {
-  _id: { toString: () => string };
+  _id: Types.ObjectId;
   details: MemberDetails;
   bills: Array<any>;
   payments: Array<Payment>;

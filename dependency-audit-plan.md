@@ -34,7 +34,7 @@ Completed phases are documented in `progress.txt`.
 ### Phase 5 — Other major version upgrades (LOW)
 - `uuid` 9 → 10 ✅ (v11+ is ESM-only, incompatible with module:commonjs)
 - `dotenv` 16 → 17 ✅
-- `mongoose` 8 → 9 (risky — significant breaking changes)
+- `mongoose` 8 → 9 ✅ (removed deprecated connection options)
 - `tailwindcss` 3 → 4 (risky — significant config changes)
 - `express` 4 → 5 ✅
 - Evaluate each separately

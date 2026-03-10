@@ -8,11 +8,8 @@ const hostname: string = process.env.DB_HOST || "localhost";
 const connection: string = `mongodb://${hostname}:27017/${clusterName}`;
 console.log('Connecting to', connection);
 
-const connectDb = (): Promise<typeof mongoose> => 
-  mongoose.connect(connection, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  } as mongoose.ConnectOptions);
+const connectDb = (): Promise<typeof mongoose> =>
+  mongoose.connect(connection);
 
 // Import models
 import './models/bill';

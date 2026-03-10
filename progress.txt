@@ -72,3 +72,17 @@ API compatibility: Full. Routes, middleware, and request/response handling are
 unchanged. body-parser continues to work as a separate package in Express 5.
 
 Result: TypeScript type-check: clean. All 12 tests pass.
+## Phase 5d — Upgrade mongoose 8 → 9 (2026-03-10)
+
+Task: Upgrade mongoose from ^8.1.3 to ^9.2.4.
+
+Changes:
+- mongoose: 8.x → 9.2.4
+- database.ts: removed deprecated `useNewUrlParser` and `useUnifiedTopology` options
+  from `mongoose.connect()` call (removed in mongoose 9; were no-ops in v8)
+
+Compatibility: mongoose-sequence@6.0.1 declares peerDependencies `mongoose: >=5`,
+so no plugin upgrade was needed. All other mongoose APIs (Schema, model, queries,
+populate, sort, distinct, save, findByIdAndDelete) are fully compatible with v9.
+
+Result: TypeScript type-check: clean. All 12 tests pass.
